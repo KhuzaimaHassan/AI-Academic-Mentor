@@ -32,18 +32,23 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# Custom CSS for modern styling
+# Custom CSS for modern styling - Works in both light and dark themes
 st.markdown("""
 <style>
-    /* Main background gradient */
-    .main {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        background-attachment: fixed;
+    /* Force main background gradient for both themes */
+    .main, .block-container {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+        background-attachment: fixed !important;
+    }
+    
+    /* Override Streamlit's default background */
+    .stApp {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
     }
     
     /* Card styling */
     .student-card {
-        background: rgba(255, 255, 255, 0.95);
+        background: rgba(255, 255, 255, 0.95) !important;
         padding: 2rem;
         border-radius: 15px;
         box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
@@ -55,7 +60,7 @@ st.markdown("""
     /* Info box styling */
     .info-box {
         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        color: white;
+        color: white !important;
         padding: 1.5rem;
         border-radius: 12px;
         margin: 0.5rem 0;
@@ -70,7 +75,7 @@ st.markdown("""
     
     /* Metric card */
     .metric-card {
-        background: white;
+        background: white !important;
         padding: 1.5rem;
         border-radius: 10px;
         text-align: center;
@@ -104,9 +109,9 @@ st.markdown("""
     
     /* Button styling */
     .stButton>button {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        color: white;
-        border: none;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+        color: white !important;
+        border: none !important;
         padding: 0.75rem 2rem;
         font-size: 1.1rem;
         font-weight: 600;
@@ -122,7 +127,7 @@ st.markdown("""
     
     /* Report container */
     .report-container {
-        background: white;
+        background: white !important;
         padding: 2rem;
         border-radius: 15px;
         box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
@@ -131,23 +136,24 @@ st.markdown("""
     
     /* Sidebar styling */
     [data-testid="stSidebar"] {
-        background: linear-gradient(180deg, #667eea 0%, #764ba2 100%);
+        background: linear-gradient(180deg, #667eea 0%, #764ba2 100%) !important;
     }
     
     [data-testid="stSidebar"] * {
         color: white !important;
     }
     
-    /* Select box styling */
+    /* Select box styling - works in both themes */
     .stSelectbox > div > div {
-        background-color: white;
+        background-color: white !important;
         border-radius: 10px;
     }
     
     .stSelectbox label {
-        color: #333 !important;
+        color: white !important;
         font-size: 1.1rem !important;
         font-weight: 600 !important;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
     }
     
     .stSelectbox input {
@@ -183,7 +189,7 @@ st.markdown("""
     
     /* Dropdown icon/arrow */
     .stSelectbox svg {
-        fill: #333 !important;
+        fill: white !important;
     }
     
     /* Input placeholder */
@@ -214,6 +220,11 @@ st.markdown("""
     /* Success/Error message styling */
     .stSuccess, .stError, .stWarning, .stInfo {
         border-radius: 10px;
+    }
+    
+    /* Force white text visibility on gradient background */
+    h1, h2, h3, h4, h5, h6, p, span, div {
+        color: inherit;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -527,23 +538,27 @@ def main():
     """, unsafe_allow_html=True)
     
     # Main content area
-    # Animated header with better contrast
+    # Animated header with gradient background - works in both themes
     st.markdown("""
     <div style="text-align: center; padding: 2rem 0; 
-                background: rgba(255,255,255,0.1); 
+                background: linear-gradient(135deg, rgba(102,126,234,0.3) 0%, rgba(118,75,162,0.3) 100%); 
                 border-radius: 20px; 
-                margin-bottom: 2rem;">
+                margin-bottom: 2rem;
+                border: 2px solid rgba(255,255,255,0.5);
+                backdrop-filter: blur(10px);">
         <h1 style="font-size: 3.5rem; font-weight: 800; 
-                   color: white;
+                   color: white !important;
                    margin: 0; 
-                   text-shadow: 3px 3px 6px rgba(0,0,0,0.4);">
+                   text-shadow: 3px 3px 8px rgba(0,0,0,0.7),
+                               0px 0px 20px rgba(0,0,0,0.5);">
             🤖 AI Academic Mentor
         </h1>
         <p style="font-size: 1.5rem; 
-                  color: white; 
+                  color: white !important; 
                   font-weight: 600;
                   margin-top: 1rem; 
-                  text-shadow: 2px 2px 5px rgba(0,0,0,0.5);
+                  text-shadow: 2px 2px 6px rgba(0,0,0,0.8),
+                              0px 0px 15px rgba(0,0,0,0.6);
                   letter-spacing: 0.5px;">
             Empowering Students with Intelligent Insights
         </p>

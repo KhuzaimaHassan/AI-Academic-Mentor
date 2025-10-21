@@ -178,18 +178,30 @@ st.markdown("""
         border: 1px solid rgba(102, 126, 234, 0.2) !important;
     }
     
+    /* Target the option list item */
     [role="option"] {
         color: #2d3748 !important;
         font-size: 1.05rem !important;
         padding: 0.75rem 1rem !important;
         transition: all 0.2s ease !important;
     }
+
+    /* NEW: Force the text *inside* the option to be dark */
+    [role="option"] div {
+        color: #2d3748 !important;
+    }
     
+    /* Target the hover state */
     [role="option"]:hover {
         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
         color: white !important;
         border-radius: 8px !important;
         margin: 0 0.5rem !important;
+    }
+
+    /* NEW: Force the text *inside* the hovered option to be white */
+    [role="option"]:hover div {
+        color: white !important;
     }
     
     /* ============================================
@@ -894,27 +906,28 @@ def main():
                 progress_bar.empty()
                 
                 # Display the result in a beautiful container
-                st.markdown("<br>", unsafe_allow_html=True)
+               st.markdown("<br>", unsafe_allow_html=True) # Add a bit more space before the report
+
+                # Start of the report container (using the content-card class for consistent styling)
                 st.markdown("""
-                <div style="background: white; 
-                            padding: 2.5rem; 
-                            border-radius: 15px; 
-                            box-shadow: 0 8px 32px rgba(0,0,0,0.15);
-                            border-top: 5px solid #667eea;">
-                    <h2 style="color: #667eea; 
+                <div class="content-card" style="border-top: 5px solid #667eea;">
+                    <h2 style="color: #667eea !important; 
                                text-align: center; 
                                margin-top: 0;
                                font-size: 2.2rem;
                                font-weight: 700;
+                               text-shadow: none !important; /* Ensure no text shadow here */
                                margin-bottom: 1.5rem;">
                         📋 AI Mentor Report
                     </h2>
-                    <div style="color: #333; font-size: 1.05rem; line-height: 1.8;">
+                    <div style="color: #2d3748; font-size: 1.05rem; line-height: 1.8;">
                 """, unsafe_allow_html=True)
                 
+                # The actual report content
                 st.markdown(final_report)
+
+                # End of the report container
                 st.markdown("</div></div>", unsafe_allow_html=True)
-                
                 # Download button for report
                 st.markdown("<br>", unsafe_allow_html=True)
                 col1, col2, col3 = st.columns([1, 2, 1])

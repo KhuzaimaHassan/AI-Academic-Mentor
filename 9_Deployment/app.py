@@ -911,11 +911,11 @@ def main():
                 # 1. Convert the Markdown report string to an HTML string
                 report_as_html = markdown.markdown(final_report)
 
-                # 2. Build the entire HTML card, embedding the new HTML report
-                report_html = f"""
+                # 2. Render the card header and OPEN the card div
+                st.markdown(f"""
                 <div class="content-card" style="border-top: 5px solid #667eea; margin-top: 2rem;">
-                    <h2 style="color: #667eea !important; 
-                               text-align: center; 
+                    <h2 style="color: #667eea !important;
+                               text-align: center;
                                margin-top: 0;
                                font-size: 2.2rem;
                                font-weight: 700;
@@ -923,14 +923,14 @@ def main():
                                margin-bottom: 1.5rem;">
                         📋 AI Mentor Report
                     </h2>
-                    
-                    {report_as_html}
-                    
-                </div>
-                """
+                """, unsafe_allow_html=True)
 
-                # 3. Render the entire HTML block in ONE single call
-                st.markdown(report_html, unsafe_allow_html=True)
+                # 3. Render the report content *directly* as HTML
+                # This prevents Streamlit from escaping the HTML tags
+                st.markdown(report_as_html, unsafe_allow_html=True)
+
+                # 4. Close the card div
+                st.markdown("</div>", unsafe_allow_html=True)
 
                 # --- END: NEW REPORT RENDERING ---
                 

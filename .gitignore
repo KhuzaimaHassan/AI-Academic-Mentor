@@ -1,0 +1,66 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual Environment
+venv/
+ENV/
+env/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# Environment variables
+.env
+.env.local
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Project specific
+*.log
+*.csv.gz
+*.pkl.gz
+
+# Large CSV files (download separately from OULAD)
+Data_csv's/studentVle.csv
+
+# Temporary files
+*.tmp
+*.bak
+*.cache
+
+# Model files (optional - uncomment if models are too large)
+# 6_Models/*.pkl
+# 6_Models/vectorstore/
+
+# Screenshots (keep the folder structure but ignore images if needed)
+# 8_Demo/screenshots/*.png
+# 8_Demo/screenshots/*.jpg

@@ -431,7 +431,7 @@ st.markdown("""
         color: #2d3748 !important;
     }
     
-    /* In white cards, ensure text is dark */
+    /* In white cards, ensure text is dark and no shadows */
     [style*="background: white"] h1,
     [style*="background: white"] h2,
     [style*="background: white"] h3,
@@ -442,6 +442,13 @@ st.markdown("""
     [style*="background: white"] span,
     [style*="background: white"] div,
     [style*="background: white"] strong {
+        text-shadow: none !important;
+    }
+    
+    /* Override for stat cards and content cards */
+    .stat-card h3, .stat-card p,
+    .content-card h2, .content-card p,
+    .content-card h3, .content-card h4 {
         text-shadow: none !important;
     }
     
@@ -767,8 +774,8 @@ def main():
     with col1:
         st.markdown("""
         <div class="stat-card" style="border-left: 5px solid #667eea;">
-            <h3 style="color: #667eea; margin: 0; font-size: 2.5rem; font-weight: 700; text-shadow: none !important;">{}</h3>
-            <p style="color: #4a5568; margin: 0.5rem 0 0 0; font-size: 1rem; font-weight: 600; text-shadow: none !important;">Total Students</p>
+            <h3 style="color: #667eea !important; margin: 0; font-size: 2.5rem; font-weight: 700; text-shadow: none !important;">{}</h3>
+            <p style="color: #4a5568 !important; margin: 0.5rem 0 0 0; font-size: 1rem; font-weight: 600; text-shadow: none !important;">Total Students</p>
         </div>
         """.format(len(df)), unsafe_allow_html=True)
     
@@ -776,8 +783,8 @@ def main():
         pass_rate = (df['final_result'] == 'Pass').sum() / len(df) * 100 if 'final_result' in df.columns else 0
         st.markdown("""
         <div class="stat-card" style="border-left: 5px solid #28a745;">
-            <h3 style="color: #28a745; margin: 0; font-size: 2.5rem; font-weight: 700; text-shadow: none !important;">{:.1f}%</h3>
-            <p style="color: #4a5568; margin: 0.5rem 0 0 0; font-size: 1rem; font-weight: 600; text-shadow: none !important;">Pass Rate</p>
+            <h3 style="color: #28a745 !important; margin: 0; font-size: 2.5rem; font-weight: 700; text-shadow: none !important;">{:.1f}%</h3>
+            <p style="color: #4a5568 !important; margin: 0.5rem 0 0 0; font-size: 1rem; font-weight: 600; text-shadow: none !important;">Pass Rate</p>
         </div>
         """.format(pass_rate), unsafe_allow_html=True)
     
@@ -785,8 +792,8 @@ def main():
         avg_credits = df['studied_credits'].mean() if 'studied_credits' in df.columns else 0
         st.markdown("""
         <div class="stat-card" style="border-left: 5px solid #764ba2;">
-            <h3 style="color: #764ba2; margin: 0; font-size: 2.5rem; font-weight: 700; text-shadow: none !important;">{:.0f}</h3>
-            <p style="color: #4a5568; margin: 0.5rem 0 0 0; font-size: 1rem; font-weight: 600; text-shadow: none !important;">Avg Credits</p>
+            <h3 style="color: #764ba2 !important; margin: 0; font-size: 2.5rem; font-weight: 700; text-shadow: none !important;">{:.0f}</h3>
+            <p style="color: #4a5568 !important; margin: 0.5rem 0 0 0; font-size: 1rem; font-weight: 600; text-shadow: none !important;">Avg Credits</p>
         </div>
         """.format(avg_credits), unsafe_allow_html=True)
     
@@ -794,8 +801,8 @@ def main():
         unique_courses = df['code_module'].nunique() if 'code_module' in df.columns else 0
         st.markdown("""
         <div class="stat-card" style="border-left: 5px solid #ffa502;">
-            <h3 style="color: #ffa502; margin: 0; font-size: 2.5rem; font-weight: 700; text-shadow: none !important;">{}</h3>
-            <p style="color: #4a5568; margin: 0.5rem 0 0 0; font-size: 1rem; font-weight: 600; text-shadow: none !important;">Courses</p>
+            <h3 style="color: #ffa502 !important; margin: 0; font-size: 2.5rem; font-weight: 700; text-shadow: none !important;">{}</h3>
+            <p style="color: #4a5568 !important; margin: 0.5rem 0 0 0; font-size: 1rem; font-weight: 600; text-shadow: none !important;">Courses</p>
         </div>
         """.format(unique_courses), unsafe_allow_html=True)
     
@@ -804,7 +811,7 @@ def main():
     # Student selection in a beautiful container
     st.markdown("""
     <div class="content-card" style="border-top: 5px solid #667eea; margin-bottom: 2rem;">
-        <h2 style="color: #667eea; 
+        <h2 style="color: #667eea !important; 
                    text-align: center; 
                    margin-top: 0;
                    font-size: 2rem;
@@ -813,7 +820,7 @@ def main():
             🎯 Select Student for Analysis
         </h2>
         <p style="text-align: center; 
-                  color: #4a5568; 
+                  color: #4a5568 !important; 
                   font-size: 1.1rem;
                   margin-bottom: 1.5rem;
                   text-shadow: none !important;">

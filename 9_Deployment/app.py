@@ -4,6 +4,7 @@ Main deployment interface for the academic mentoring system
 """
 
 # Suppress warnings for cleaner output
+import markdown
 import warnings
 warnings.filterwarnings('ignore')
 
@@ -905,33 +906,34 @@ def main():
                 progress_text.empty()
                 progress_bar.empty()
 
-                # --- START: NEW REPORT RENDERING ---
-                
-                # Build the entire HTML string in Python first
-                # We use your 'content-card' class for consistent styling
-                report_html = f"""
-                <div class="content-card" style="border-top: 5px solid #667eea; margin-top: 2rem;">
-                    <h2 style="color: #667eea !important; 
-                               text-align: center; 
-                               margin-top: 0;
-                               font-size: 2.2rem;
-                               font-weight: 700;
-                               text-shadow: none !important;
-                               margin-bottom: 1.5rem;">
-                        📋 AI Mentor Report
-                    </h2>
-                    
-                    <div style="color: #2d3748; font-size: 1.05rem; line-height: 1.8;">
-                        {final_report}
-                    </div>
+               # --- START: NEW REPORT RENDERING ---
+
+            # 1. Convert the Markdown report string to an HTML string
+            report_as_html = markdown.markdown(final_report)
+
+            # 2. Build the entire HTML card, embedding the new HTML report
+            report_html = f"""
+            <div class="content-card" style="border-top: 5px solid #667eea; margin-top: 2rem;">
+                <h2 style="color: #667eea !important; 
+                           text-align: center; 
+                           margin-top: 0;
+                           font-size: 2.2rem;
+                           font-weight: 700;
+                           text-shadow: none !important;
+                           margin-bottom: 1.5rem;">
+                    📋 AI Mentor Report
+                </h2>
+
+                <div style="color: #2d3748; font-size: 1.05rem; line-height: 1.8;">
+                    {report_as_html}
                 </div>
-                """
-                
-                # Render the entire HTML block in ONE single call
-                st.markdown(report_html, unsafe_allow_html=True)
-                
-                # --- END: NEW REPORT RENDERING ---
-                
+            </div>
+            """
+
+            # 3. Render the entire HTML block in ONE single call
+            st.markdown(report_html, unsafe_allow_html=True)
+
+            # --- END: NEW REPORT RENDERING ---
                
                 # Download button for report
                 st.markdown("<br>", unsafe_allow_html=True)

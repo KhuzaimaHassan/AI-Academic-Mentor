@@ -904,30 +904,35 @@ def main():
                 # Clear progress indicators
                 progress_text.empty()
                 progress_bar.empty()
-                
-                # Display the result in a beautiful container
-               st.markdown("<br>", unsafe_allow_html=True) # Add a bit more space before the report
 
-                # Start of the report container (using the content-card class for consistent styling)
-                st.markdown("""
-                <div class="content-card" style="border-top: 5px solid #667eea;">
+                # --- START: NEW REPORT RENDERING ---
+                
+                # Build the entire HTML string in Python first
+                # We use your 'content-card' class for consistent styling
+                report_html = f"""
+                <div class="content-card" style="border-top: 5px solid #667eea; margin-top: 2rem;">
                     <h2 style="color: #667eea !important; 
                                text-align: center; 
                                margin-top: 0;
                                font-size: 2.2rem;
                                font-weight: 700;
-                               text-shadow: none !important; /* Ensure no text shadow here */
+                               text-shadow: none !important;
                                margin-bottom: 1.5rem;">
                         📋 AI Mentor Report
                     </h2>
+                    
                     <div style="color: #2d3748; font-size: 1.05rem; line-height: 1.8;">
-                """, unsafe_allow_html=True)
+                        {final_report}
+                    </div>
+                </div>
+                """
                 
-                # The actual report content
-                st.markdown(final_report)
-
-                # End of the report container
-                st.markdown("</div></div>", unsafe_allow_html=True)
+                # Render the entire HTML block in ONE single call
+                st.markdown(report_html, unsafe_allow_html=True)
+                
+                # --- END: NEW REPORT RENDERING ---
+                
+               
                 # Download button for report
                 st.markdown("<br>", unsafe_allow_html=True)
                 col1, col2, col3 = st.columns([1, 2, 1])

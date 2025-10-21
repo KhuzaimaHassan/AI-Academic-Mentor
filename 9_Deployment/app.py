@@ -442,6 +442,7 @@ st.markdown("""
     [style*="background: white"] span,
     [style*="background: white"] div,
     [style*="background: white"] strong {
+        color: #2d3748 !important;
         text-shadow: none !important;
     }
     
@@ -449,6 +450,7 @@ st.markdown("""
     .stat-card h3, .stat-card p,
     .content-card h2, .content-card p,
     .content-card h3, .content-card h4 {
+        color: #2d3748 !important;
         text-shadow: none !important;
     }
     

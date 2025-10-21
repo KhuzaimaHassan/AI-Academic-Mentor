@@ -519,12 +519,12 @@ def main():
         
     st.markdown("---")
     
-        st.markdown("""
-        <div style="text-align: center; font-size: 0.8rem; opacity: 0.7;">
-            <p>Dataset: OULAD</p>
-            <p>Version 1.0.0</p>
-        </div>
-        """, unsafe_allow_html=True)
+    st.markdown("""
+    <div style="text-align: center; font-size: 0.8rem; opacity: 0.7;">
+        <p>Dataset: OULAD</p>
+        <p>Version 1.0.0</p>
+    </div>
+    """, unsafe_allow_html=True)
     
     # Main content area
     # Animated header with better contrast

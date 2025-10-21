@@ -1,0 +1,25 @@
+# Streamlit App Configuration
+
+[theme]
+# Primary color (purple gradient)
+primaryColor = "#667eea"
+
+# Background color
+backgroundColor = "#ffffff"
+
+# Secondary background color
+secondaryBackgroundColor = "#f0f2f6"
+
+# Text color
+textColor = "#262730"
+
+# Font
+font = "sans serif"
+
+[server]
+# File watcher settings to suppress warnings
+fileWatcherType = "none"
+headless = true
+enableCORS = false
+enableXsrfProtection = false
+

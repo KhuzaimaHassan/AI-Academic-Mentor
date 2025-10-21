@@ -517,8 +517,8 @@ def main():
         st.success("✅ RAG System: Ready")
         st.success("✅ ML Pipeline: Loaded")
         
-        st.markdown("---")
-        
+    st.markdown("---")
+    
         st.markdown("""
         <div style="text-align: center; font-size: 0.8rem; opacity: 0.7;">
             <p>Dataset: OULAD</p>
@@ -552,7 +552,7 @@ def main():
     
     # Load student data with progress indicator
     with st.spinner('📊 Loading student database...'):
-        df = load_student_data()
+    df = load_student_data()
     
     if df is None:
         st.stop()
@@ -666,17 +666,17 @@ def main():
             """, unsafe_allow_html=True)
             progress_bar.progress(20)
             
-            try:
-                # Initialize the LangGraph agent
+                try:
+                    # Initialize the LangGraph agent
                 progress_text.markdown("""
                 <h3 style="color: #764ba2; font-size: 1.5rem; font-weight: 700; text-align: center;">
                     🧠 Initializing AI agents...
                 </h3>
                 """, unsafe_allow_html=True)
-                agent = AgenticAIPipeline()
+                    agent = AgenticAIPipeline()
                 progress_bar.progress(40)
-                
-                # Call the LangGraph function
+                    
+                    # Call the LangGraph function
                 progress_text.markdown("""
                 <h3 style="color: #28a745; font-size: 1.5rem; font-weight: 700; text-align: center;">
                     📊 Analyzing student data...
@@ -684,7 +684,7 @@ def main():
                 """, unsafe_allow_html=True)
                 progress_bar.progress(60)
                 
-                final_report = agent.run_student_analysis(selected_id)
+                    final_report = agent.run_student_analysis(selected_id)
                 progress_bar.progress(100)
                 
                 # Clear progress indicators
@@ -710,7 +710,7 @@ def main():
                     <div style="color: #333; font-size: 1.05rem; line-height: 1.8;">
                 """, unsafe_allow_html=True)
                 
-                st.markdown(final_report)
+                    st.markdown(final_report)
                 st.markdown("</div></div>", unsafe_allow_html=True)
                 
                 # Download button for report
@@ -724,15 +724,15 @@ def main():
                         mime="text/markdown",
                         use_container_width=True
                     )
-                
-            except Exception as e:
+                    
+                except Exception as e:
                 progress_text.empty()
                 progress_bar.empty()
                 
-                st.error(f"❌ Error generating mentor report: {e}")
-                
+                    st.error(f"❌ Error generating mentor report: {e}")
+    
                 with st.expander("💡 Troubleshooting Tips"):
-                    st.markdown("""
+    st.markdown("""
                     1. ✅ Ensure Groq API key is configured in `config.py`
                     2. ✅ Check that all dependencies are installed
                     3. ✅ Verify that ML models are trained

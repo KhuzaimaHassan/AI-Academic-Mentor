@@ -54,16 +54,35 @@ class AgenticAIPipeline:
         if groq_api_key:
             api_key = groq_api_key
         else:
-            # Try to load from config file
+            # Try multiple sources for API key (in order of priority)
+            api_key = None
+            
+            # 1. Try Streamlit secrets (for Streamlit Cloud deployment)
             try:
-                # Add parent directory to path
-                parent_dir = Path(__file__).parent.parent
-                sys.path.insert(0, str(parent_dir))
-                from config import GROQ_API_KEY
-                api_key = GROQ_API_KEY
-            except ImportError:
-                # Try environment variable
+                import streamlit as st
+                if hasattr(st, 'secrets') and 'groq' in st.secrets:
+                    api_key = st.secrets['groq']['GROQ_API_KEY']
+                    print("✅ Using Groq API key from Streamlit secrets")
+            except Exception:
+                pass
+            
+            # 2. Try config file (for local development)
+            if not api_key:
+                try:
+                    parent_dir = Path(__file__).parent.parent
+                    sys.path.insert(0, str(parent_dir))
+                    from config import GROQ_API_KEY
+                    if GROQ_API_KEY and GROQ_API_KEY != "your_groq_api_key_here":
+                        api_key = GROQ_API_KEY
+                        print("✅ Using Groq API key from config.py")
+                except ImportError:
+                    pass
+            
+            # 3. Try environment variable (fallback)
+            if not api_key:
                 api_key = os.getenv('GROQ_API_KEY')
+                if api_key:
+                    print("✅ Using Groq API key from environment variable")
         
         if api_key and api_key != "your_groq_api_key_here":
             try:
@@ -77,7 +96,7 @@ class AgenticAIPipeline:
                 print(f"❌ Failed to initialize Groq LLM: {e}")
                 self.llm = None
         else:
-            print("⚠️ Groq API key not configured. Please set GROQ_API_KEY in config.py")
+            print("⚠️ Groq API key not configured. Please add it via Streamlit secrets or config.py")
             self.llm = None
         
         # Initialize RAG system

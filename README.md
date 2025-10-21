@@ -223,6 +223,38 @@ Our Prefect-based orchestration pipeline provides complete automation of the aca
    - Click "Generate Mentor Report"
    - View AI-generated recommendations
 
+---
+
+## 🚀 Streamlit Cloud Deployment
+
+Want to deploy this app to the cloud? We've got you covered!
+
+### **📖 Complete Deployment Guide**
+
+See [STREAMLIT_DEPLOYMENT_GUIDE.md](STREAMLIT_DEPLOYMENT_GUIDE.md) for detailed instructions on:
+
+- ✅ Deploying to Streamlit Cloud (free hosting)
+- ✅ Configuring Groq API key securely using Streamlit secrets
+- ✅ Step-by-step deployment process with screenshots
+- ✅ Troubleshooting common deployment issues
+- ✅ Security best practices for API keys
+
+### **⚡ Quick Deploy**
+
+1. **Push code to GitHub** (already done! ✅)
+2. **Get Groq API key** from [console.groq.com/keys](https://console.groq.com/keys)
+3. **Deploy to Streamlit Cloud** at [share.streamlit.io](https://share.streamlit.io)
+4. **Add API key** to Streamlit secrets:
+   ```toml
+   [groq]
+   GROQ_API_KEY = "your_groq_api_key_here"
+   ```
+5. **Done!** Your app is live 🎉
+
+For complete instructions, see [STREAMLIT_DEPLOYMENT_GUIDE.md](STREAMLIT_DEPLOYMENT_GUIDE.md)
+
+---
+
 ### **Individual Component Testing**
 
 #### **Test ML Pipeline**

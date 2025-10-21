@@ -882,70 +882,65 @@ def main():
             progress_bar.progress(20)
             
             try:
-                # Initialize the LangGraph agent
-                progress_text.markdown("""
-                <h3 style="color: #764ba2; font-size: 1.5rem; font-weight: 700; text-align: center;">
-                    🧠 Initializing AI agents...
-                </h3>
-                """, unsafe_allow_html=True)
-                agent = AgenticAIPipeline()
-                progress_bar.progress(40)
-                
-                # Call the LangGraph function
-                progress_text.markdown("""
-                <h3 style="color: #28a745; font-size: 1.5rem; font-weight: 700; text-align: center;">
-                    📊 Analyzing student data...
-                </h3>
-                """, unsafe_allow_html=True)
-                progress_bar.progress(60)
-                
-                final_report = agent.run_student_analysis(selected_id)
-                progress_bar.progress(100)
-                
-                # Clear progress indicators
-                progress_text.empty()
-                progress_bar.empty()
-
-                # --- START: NEW REPORT RENDERING ---
-
-                # 1. Convert the Markdown report string to an HTML string
-                report_as_html = markdown.markdown(final_report)
-
-                # 2. Render the card header and OPEN the card div
-                st.markdown(f"""
-                <div class="content-card" style="border-top: 5px solid #667eea; margin-top: 2rem;">
-                    <h2 style="color: #667eea !important;
-                               text-align: center;
-                               margin-top: 0;
-                               font-size: 2.2rem;
-                               font-weight: 700;
-                               text-shadow: none !important;
-                               margin-bottom: 1.5rem;">
-                        📋 AI Mentor Report
-                    </h2>
-                """, unsafe_allow_html=True)
-
-                # 3. Render the report content *directly* as HTML
-                # This prevents Streamlit from escaping the HTML tags
-                st.markdown(report_as_html, unsafe_allow_html=True)
-
-                # 4. Close the card div
-                st.markdown("</div>", unsafe_allow_html=True)
-
-                # --- END: NEW REPORT RENDERING ---
-                
-                # Download button for report
-                st.markdown("<br>", unsafe_allow_html=True)
-                col1, col2, col3 = st.columns([1, 2, 1])
-                with col2:
-                    st.download_button(
-                        label="📥 Download Report",
-                        data=final_report,
-                        file_name=f"mentor_report_{selected_id}.md",
-                        mime="text/markdown",
-                        use_container_width=True
-                    )
-                
+                    # Initialize the LangGraph agent
+                    progress_text.markdown("""
+                    <h3 style="color: #764ba2; font-size: 1.5rem; font-weight: 700; text-align: center;">
+                        🧠 Initializing AI agents...
+                    </h3>
+                    """, unsafe_allow_html=True)
+                    agent = AgenticAIPipeline()
+                    progress_bar.progress(40)
+                    
+                    # Call the LangGraph function
+                    progress_text.markdown("""
+                    <h3 style="color: #28a745; font-size: 1.5rem; font-weight: 700; text-align: center;">
+                        📊 Analyzing student data...
+                    </h3>
+                    """, unsafe_allow_html=True)
+                    progress_bar.progress(60)
+                    
+                    final_report = agent.run_student_analysis(selected_id)
+                    progress_bar.progress(100)
+                    
+                    # Clear progress indicators
+                    progress_text.empty()
+                    progress_bar.empty()
+                    
+                    # --- FIXED REPORT RENDERING ---
+                    # Convert the Markdown report string to HTML
+                    report_as_html = markdown.markdown(final_report)
+                    
+                    # Render everything in a single st.markdown call to keep it contained
+                    st.markdown(f"""
+                    <div class="content-card" style="border-top: 5px solid #667eea; margin-top: 2rem;">
+                        <h2 style="color: #667eea !important;
+                                   text-align: center;
+                                   margin-top: 0;
+                                   font-size: 2.2rem;
+                                   font-weight: 700;
+                                   text-shadow: none !important;
+                                   margin-bottom: 1.5rem;">
+                            📋 AI Mentor Report
+                        </h2>
+                        <div style="padding: 0 1rem;">
+                            {report_as_html}
+                        </div>
+                    </div>
+                    """, unsafe_allow_html=True)
+                    # --- END FIXED REPORT RENDERING ---
+                    
+                    # Download button for report
+                    st.markdown("<br>", unsafe_allow_html=True)
+                    col1, col2, col3 = st.columns([1, 2, 1])
+                    with col2:
+                        st.download_button(
+                            label="📥 Download Report",
+                            data=final_report,
+                            file_name=f"mentor_report_{selected_id}.md",
+                            mime="text/markdown",
+                            use_container_width=True
+                        )
+    
             except Exception as e:
                 progress_text.empty()
                 progress_bar.empty()

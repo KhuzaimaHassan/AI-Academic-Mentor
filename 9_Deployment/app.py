@@ -909,11 +909,11 @@ def main():
                # --- START: NEW REPORT RENDERING ---
 
             # 1. Convert the Markdown report string to an HTML string
-            report_as_html = markdown.markdown(final_report)
+                report_as_html = markdown.markdown(final_report)
 
             # 2. Build the entire HTML card, embedding the new HTML report
-            report_html = f"""
-            <div class="content-card" style="border-top: 5px solid #667eea; margin-top: 2rem;">
+                report_html = f"""
+                <div class="content-card" style="border-top: 5px solid #667eea; margin-top: 2rem;">
                 <h2 style="color: #667eea !important; 
                            text-align: center; 
                            margin-top: 0;
@@ -922,16 +922,16 @@ def main():
                            text-shadow: none !important;
                            margin-bottom: 1.5rem;">
                     📋 AI Mentor Report
-                </h2>
+                 </h2>
 
                 <div style="color: #2d3748; font-size: 1.05rem; line-height: 1.8;">
                     {report_as_html}
+                    </div>
                 </div>
-            </div>
-            """
+                 """
 
             # 3. Render the entire HTML block in ONE single call
-            st.markdown(report_html, unsafe_allow_html=True)
+                st.markdown(report_html, unsafe_allow_html=True)
 
             # --- END: NEW REPORT RENDERING ---
                

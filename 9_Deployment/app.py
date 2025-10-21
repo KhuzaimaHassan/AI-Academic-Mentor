@@ -32,133 +32,119 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# Custom CSS for modern styling - Works in both light and dark themes
+# Modern, Professional CSS - Fully Compatible with Light & Dark Themes
 st.markdown("""
 <style>
-    /* Force main background gradient for both themes */
-    .main, .block-container {
+    /* ============================================
+       CORE BACKGROUND & LAYOUT
+       ============================================ */
+    
+    /* Force gradient background across all themes */
+    .main, .block-container, .stApp {
         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
         background-attachment: fixed !important;
     }
     
-    /* Override Streamlit's default background */
-    .stApp {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+    /* Ensure proper spacing */
+    .block-container {
+        padding-top: 3rem !important;
+        padding-bottom: 3rem !important;
+        padding-left: 2rem !important;
+        padding-right: 2rem !important;
     }
     
-    /* Card styling */
-    .student-card {
-        background: rgba(255, 255, 255, 0.95) !important;
-        padding: 2rem;
-        border-radius: 15px;
-        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-        backdrop-filter: blur(10px);
-        margin: 1rem 0;
-        border: 1px solid rgba(255, 255, 255, 0.3);
+    /* ============================================
+       TYPOGRAPHY - Enhanced Readability
+       ============================================ */
+    
+    /* Global font improvements */
+    * {
+        font-family: 'Inter', 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
     }
     
-    /* Info box styling */
-    .info-box {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    /* Headings on gradient background - white with strong shadow */
+    h1, h2, h3 {
         color: white !important;
-        padding: 1.5rem;
-        border-radius: 12px;
-        margin: 0.5rem 0;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-        transition: transform 0.3s ease;
+        text-shadow: 2px 2px 8px rgba(0,0,0,0.6), 0px 0px 20px rgba(0,0,0,0.4) !important;
+        letter-spacing: -0.5px;
     }
     
-    .info-box:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
-    }
+    /* ============================================
+       SIDEBAR - Modern Purple Gradient
+       ============================================ */
     
-    /* Metric card */
-    .metric-card {
-        background: white !important;
-        padding: 1.5rem;
-        border-radius: 10px;
-        text-align: center;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-        transition: all 0.3s ease;
-    }
-    
-    .metric-card:hover {
-        transform: scale(1.05);
-        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-    }
-    
-    /* Title styling */
-    .main-title {
-        font-size: 3.5rem;
-        font-weight: 800;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        text-align: center;
-        margin-bottom: 1rem;
-        text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
-    }
-    
-    .subtitle {
-        text-align: center;
-        color: #555;
-        font-size: 1.2rem;
-        margin-bottom: 2rem;
-    }
-    
-    /* Button styling */
-    .stButton>button {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
-        color: white !important;
-        border: none !important;
-        padding: 0.75rem 2rem;
-        font-size: 1.1rem;
-        font-weight: 600;
-        border-radius: 50px;
-        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
-        transition: all 0.3s ease;
-    }
-    
-    .stButton>button:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 8px 25px rgba(102, 126, 234, 0.6);
-    }
-    
-    /* Report container */
-    .report-container {
-        background: white !important;
-        padding: 2rem;
-        border-radius: 15px;
-        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-        margin-top: 2rem;
-    }
-    
-    /* Sidebar styling */
     [data-testid="stSidebar"] {
         background: linear-gradient(180deg, #667eea 0%, #764ba2 100%) !important;
+        box-shadow: 4px 0 15px rgba(0,0,0,0.1);
     }
     
     [data-testid="stSidebar"] * {
         color: white !important;
     }
     
-    /* Select box styling - works in both themes */
-    .stSelectbox > div > div {
-        background-color: white !important;
-        border-radius: 10px;
+    [data-testid="stSidebar"] .stMarkdown {
+        color: white !important;
     }
+    
+    [data-testid="stSidebar"] hr {
+        border-color: rgba(255,255,255,0.3) !important;
+        margin: 1.5rem 0 !important;
+    }
+    
+    /* ============================================
+       BUTTONS - Purple Gradient with Hover
+       ============================================ */
+    
+    .stButton>button, .stDownloadButton>button {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+        color: white !important;
+        border: none !important;
+        padding: 0.75rem 2.5rem !important;
+        font-size: 1.1rem !important;
+        font-weight: 600 !important;
+        border-radius: 50px !important;
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4) !important;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        cursor: pointer !important;
+        text-transform: none !important;
+        letter-spacing: 0.5px !important;
+    }
+    
+    .stButton>button:hover, .stDownloadButton>button:hover {
+        transform: translateY(-3px) !important;
+        box-shadow: 0 8px 30px rgba(102, 126, 234, 0.6) !important;
+        background: linear-gradient(135deg, #7b8ff0 0%, #8a5fb8 100%) !important;
+    }
+    
+    .stButton>button:active, .stDownloadButton>button:active {
+        transform: translateY(-1px) !important;
+    }
+    
+    /* ============================================
+       SELECT BOX / DROPDOWN - White with Dark Text
+       ============================================ */
     
     .stSelectbox label {
         color: white !important;
-        font-size: 1.1rem !important;
-        font-weight: 600 !important;
-        text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        font-size: 1.15rem !important;
+        font-weight: 700 !important;
+        text-shadow: 2px 2px 6px rgba(0,0,0,0.5) !important;
+        margin-bottom: 0.75rem !important;
     }
     
-    .stSelectbox input {
-        color: #333 !important;
-        font-size: 1.1rem !important;
+    .stSelectbox > div > div {
+        background-color: white !important;
+        border-radius: 12px !important;
+        border: 2px solid rgba(255,255,255,0.3) !important;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.15) !important;
+        transition: all 0.3s ease !important;
+    }
+    
+    .stSelectbox > div > div:hover {
+        border-color: rgba(255,255,255,0.6) !important;
+        box-shadow: 0 6px 25px rgba(0,0,0,0.2) !important;
     }
     
     .stSelectbox [data-baseweb="select"] {
@@ -166,65 +152,335 @@ st.markdown("""
     }
     
     .stSelectbox [data-baseweb="select"] > div {
-        color: #333 !important;
+        color: #2d3748 !important;
         font-size: 1.1rem !important;
         font-weight: 500 !important;
+        padding: 0.75rem 1rem !important;
     }
     
-    /* Dropdown menu items */
+    .stSelectbox input {
+        color: #2d3748 !important;
+        font-size: 1.1rem !important;
+    }
+    
+    /* Dropdown arrow */
+    .stSelectbox svg {
+        fill: #667eea !important;
+        width: 24px !important;
+        height: 24px !important;
+    }
+    
+    /* Dropdown menu */
+    [data-baseweb="popover"], [data-baseweb="menu"] {
+        background-color: white !important;
+        border-radius: 12px !important;
+        box-shadow: 0 8px 30px rgba(0,0,0,0.2) !important;
+        border: 1px solid rgba(102, 126, 234, 0.2) !important;
+    }
+    
     [role="option"] {
-        color: #333 !important;
-        font-size: 1rem !important;
+        color: #2d3748 !important;
+        font-size: 1.05rem !important;
+        padding: 0.75rem 1rem !important;
+        transition: all 0.2s ease !important;
     }
     
     [role="option"]:hover {
-        background-color: #667eea !important;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
         color: white !important;
+        border-radius: 8px !important;
+        margin: 0 0.5rem !important;
     }
     
-    /* Selected value in dropdown */
-    [data-baseweb="select"] span {
-        color: #333 !important;
+    /* ============================================
+       METRICS / INFO CARDS - Clean White Cards
+       ============================================ */
+    
+    .stMetric {
+        background: white !important;
+        padding: 1.5rem !important;
+        border-radius: 15px !important;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.12) !important;
+        border: 1px solid rgba(255,255,255,0.3) !important;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
     }
     
-    /* Dropdown icon/arrow */
-    .stSelectbox svg {
-        fill: white !important;
+    .stMetric:hover {
+        transform: translateY(-5px) !important;
+        box-shadow: 0 8px 30px rgba(0,0,0,0.18) !important;
     }
     
-    /* Input placeholder */
-    .stSelectbox input::placeholder {
-        color: #999 !important;
+    .stMetric label {
+        color: #4a5568 !important;
+        font-size: 0.95rem !important;
+        font-weight: 600 !important;
+        text-transform: uppercase !important;
+        letter-spacing: 0.5px !important;
     }
     
-    /* Listbox (dropdown menu) */
-    [data-baseweb="popover"] {
-        background-color: white !important;
+    .stMetric [data-testid="stMetricValue"] {
+        color: #667eea !important;
+        font-size: 2.5rem !important;
+        font-weight: 800 !important;
     }
     
-    [data-baseweb="menu"] {
-        background-color: white !important;
+    /* ============================================
+       PROGRESS & SPINNER - Brand Colors
+       ============================================ */
+    
+    .stProgress > div > div {
+        background: linear-gradient(90deg, #667eea 0%, #764ba2 100%) !important;
+        border-radius: 10px !important;
     }
     
-    /* Menu items in dropdown list */
-    [data-baseweb="menu"] li {
-        color: #333 !important;
-        background-color: white !important;
+    .stSpinner > div {
+        border-top-color: #667eea !important;
     }
     
-    [data-baseweb="menu"] li:hover {
-        background-color: #667eea !important;
-        color: white !important;
+    /* ============================================
+       ALERTS & NOTIFICATIONS
+       ============================================ */
+    
+    .stSuccess {
+        background-color: rgba(72, 187, 120, 0.1) !important;
+        border-left: 4px solid #48bb78 !important;
+        border-radius: 10px !important;
+        padding: 1rem 1.5rem !important;
+        color: #22543d !important;
     }
     
-    /* Success/Error message styling */
-    .stSuccess, .stError, .stWarning, .stInfo {
-        border-radius: 10px;
+    .stError {
+        background-color: rgba(245, 101, 101, 0.1) !important;
+        border-left: 4px solid #f56565 !important;
+        border-radius: 10px !important;
+        padding: 1rem 1.5rem !important;
+        color: #742a2a !important;
     }
     
-    /* Force white text visibility on gradient background */
-    h1, h2, h3, h4, h5, h6, p, span, div {
-        color: inherit;
+    .stWarning {
+        background-color: rgba(237, 137, 54, 0.1) !important;
+        border-left: 4px solid #ed8936 !important;
+        border-radius: 10px !important;
+        padding: 1rem 1.5rem !important;
+        color: #7c2d12 !important;
+    }
+    
+    .stInfo {
+        background-color: rgba(66, 153, 225, 0.1) !important;
+        border-left: 4px solid #4299e1 !important;
+        border-radius: 10px !important;
+        padding: 1rem 1.5rem !important;
+        color: #2c5282 !important;
+    }
+    
+    /* ============================================
+       EXPANDER - Collapsible Sections
+       ============================================ */
+    
+    .streamlit-expanderHeader {
+        background: white !important;
+        border-radius: 10px !important;
+        padding: 1rem 1.5rem !important;
+        font-weight: 600 !important;
+        color: #2d3748 !important;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.08) !important;
+        transition: all 0.2s ease !important;
+    }
+    
+    .streamlit-expanderHeader:hover {
+        background: #f7fafc !important;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.12) !important;
+    }
+    
+    .streamlit-expanderContent {
+        background: white !important;
+        border-radius: 0 0 10px 10px !important;
+        padding: 1.5rem !important;
+        border: 1px solid rgba(102, 126, 234, 0.1) !important;
+        border-top: none !important;
+    }
+    
+    /* ============================================
+       CUSTOM ELEMENTS - For Inline HTML
+       ============================================ */
+    
+    /* Main header box */
+    .header-box {
+        background: linear-gradient(135deg, rgba(102,126,234,0.25) 0%, rgba(118,75,162,0.25) 100%) !important;
+        backdrop-filter: blur(20px) !important;
+        border: 2px solid rgba(255,255,255,0.4) !important;
+        border-radius: 20px !important;
+        padding: 3rem 2rem !important;
+        margin-bottom: 2rem !important;
+        box-shadow: 0 10px 40px rgba(0,0,0,0.2) !important;
+    }
+    
+    /* White content cards */
+    .content-card {
+        background: white !important;
+        border-radius: 16px !important;
+        padding: 2rem !important;
+        box-shadow: 0 6px 25px rgba(0,0,0,0.12) !important;
+        border: 1px solid rgba(102, 126, 234, 0.1) !important;
+        margin: 1rem 0 !important;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    }
+    
+    .content-card:hover {
+        transform: translateY(-4px) !important;
+        box-shadow: 0 12px 35px rgba(0,0,0,0.16) !important;
+    }
+    
+    /* Stat cards */
+    .stat-card {
+        background: white !important;
+        border-radius: 15px !important;
+        padding: 2rem !important;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.1) !important;
+        text-align: center !important;
+        transition: all 0.3s ease !important;
+        border: 2px solid transparent !important;
+    }
+    
+    .stat-card:hover {
+        transform: scale(1.03) !important;
+        box-shadow: 0 8px 30px rgba(0,0,0,0.15) !important;
+        border-color: rgba(102, 126, 234, 0.3) !important;
+    }
+    
+    /* Profile info cards */
+    .info-card {
+        background: white !important;
+        border-radius: 12px !important;
+        padding: 1.75rem !important;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1) !important;
+        border-top: 4px solid #667eea !important;
+        height: 100% !important;
+        transition: all 0.3s ease !important;
+    }
+    
+    .info-card:hover {
+        box-shadow: 0 8px 25px rgba(0,0,0,0.15) !important;
+        transform: translateY(-3px) !important;
+    }
+    
+    .info-card h4 {
+        color: #667eea !important;
+        margin: 0 0 1rem 0 !important;
+        font-size: 1.3rem !important;
+        font-weight: 700 !important;
+        text-shadow: none !important;
+    }
+    
+    .info-card p {
+        color: #2d3748 !important;
+        margin: 0.6rem 0 !important;
+        line-height: 1.7 !important;
+        font-size: 1rem !important;
+        text-shadow: none !important;
+    }
+    
+    .info-card strong {
+        color: #4a5568 !important;
+        font-weight: 600 !important;
+    }
+    
+    /* System architecture cards */
+    .arch-card {
+        text-align: center !important;
+        padding: 1.5rem !important;
+        transition: all 0.3s ease !important;
+    }
+    
+    .arch-card:hover {
+        transform: translateY(-5px) !important;
+    }
+    
+    .arch-card strong {
+        color: #2d3748 !important;
+        font-size: 1.1rem !important;
+        font-weight: 700 !important;
+        display: block !important;
+        margin: 0.75rem 0 0.5rem 0 !important;
+        text-shadow: none !important;
+    }
+    
+    .arch-card p {
+        color: #4a5568 !important;
+        font-size: 0.95rem !important;
+        margin: 0 !important;
+        text-shadow: none !important;
+    }
+    
+    /* ============================================
+       PLOTLY CHARTS - Dark Text
+       ============================================ */
+    
+    .js-plotly-plot {
+        background: white !important;
+        border-radius: 12px !important;
+        padding: 1rem !important;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1) !important;
+    }
+    
+    /* ============================================
+       MARKDOWN CONTENT - Proper Contrast
+       ============================================ */
+    
+    .stMarkdown {
+        color: #2d3748 !important;
+    }
+    
+    /* In white cards, ensure text is dark */
+    [style*="background: white"] h1,
+    [style*="background: white"] h2,
+    [style*="background: white"] h3,
+    [style*="background: white"] h4,
+    [style*="background: white"] h5,
+    [style*="background: white"] h6,
+    [style*="background: white"] p,
+    [style*="background: white"] span,
+    [style*="background: white"] div,
+    [style*="background: white"] strong {
+        text-shadow: none !important;
+    }
+    
+    /* ============================================
+       ACCESSIBILITY & POLISH
+       ============================================ */
+    
+    /* Smooth scrolling */
+    html {
+        scroll-behavior: smooth;
+    }
+    
+    /* Focus states for accessibility */
+    *:focus {
+        outline: 2px solid #667eea !important;
+        outline-offset: 2px !important;
+    }
+    
+    /* Remove Streamlit branding adjustments */
+    #MainMenu {visibility: hidden;}
+    footer {visibility: hidden;}
+    
+    /* ============================================
+       RESPONSIVE DESIGN
+       ============================================ */
+    
+    @media (max-width: 768px) {
+        .block-container {
+            padding-left: 1rem !important;
+            padding-right: 1rem !important;
+        }
+        
+        h1 {
+            font-size: 2rem !important;
+        }
+        
+        .stButton>button {
+            width: 100% !important;
+        }
     }
 </style>
 """, unsafe_allow_html=True)
@@ -332,61 +588,23 @@ def display_student_info(student_id, df):
         
         with col1:
             st.markdown(f"""
-            <div style="background: white; 
-                        padding: 1.5rem; 
-                        border-radius: 12px; 
-                        box-shadow: 0 4px 15px rgba(0,0,0,0.12); 
-                        height: 100%;
-                        border-top: 4px solid #667eea;">
-                <h4 style="color: #667eea; 
-                           margin-top: 0; 
-                           font-size: 1.3rem;
-                           font-weight: 700;
-                           margin-bottom: 1rem;">
-                    🧑 Personal Information
-                </h4>
-                <p style="color: #333; font-size: 1rem; margin: 0.7rem 0; line-height: 1.6;">
-                    <strong style="color: #555;">Gender:</strong> {student_row.get('gender', 'Unknown')}
-                </p>
-                <p style="color: #333; font-size: 1rem; margin: 0.7rem 0; line-height: 1.6;">
-                    <strong style="color: #555;">Age Band:</strong> {student_row.get('age_band', 'Unknown')}
-                </p>
-                <p style="color: #333; font-size: 1rem; margin: 0.7rem 0; line-height: 1.6;">
-                    <strong style="color: #555;">Region:</strong> {student_row.get('region', 'Unknown')}
-                </p>
-                <p style="color: #333; font-size: 1rem; margin: 0.7rem 0; line-height: 1.6;">
-                    <strong style="color: #555;">Disability:</strong> {student_row.get('disability', 'N/A')}
-                </p>
+            <div class="info-card">
+                <h4>🧑 Personal Information</h4>
+                <p><strong>Gender:</strong> {student_row.get('gender', 'Unknown')}</p>
+                <p><strong>Age Band:</strong> {student_row.get('age_band', 'Unknown')}</p>
+                <p><strong>Region:</strong> {student_row.get('region', 'Unknown')}</p>
+                <p><strong>Disability:</strong> {student_row.get('disability', 'N/A')}</p>
             </div>
             """, unsafe_allow_html=True)
         
         with col2:
             st.markdown(f"""
-            <div style="background: white; 
-                        padding: 1.5rem; 
-                        border-radius: 12px; 
-                        box-shadow: 0 4px 15px rgba(0,0,0,0.12); 
-                        height: 100%;
-                        border-top: 4px solid #764ba2;">
-                <h4 style="color: #764ba2; 
-                           margin-top: 0; 
-                           font-size: 1.3rem;
-                           font-weight: 700;
-                           margin-bottom: 1rem;">
-                    📖 Academic Background
-                </h4>
-                <p style="color: #333; font-size: 1rem; margin: 0.7rem 0; line-height: 1.6;">
-                    <strong style="color: #555;">Education:</strong> {student_row.get('highest_education', 'Unknown')}
-                </p>
-                <p style="color: #333; font-size: 1rem; margin: 0.7rem 0; line-height: 1.6;">
-                    <strong style="color: #555;">Attempts:</strong> {student_row.get('num_of_prev_attempts', 'Unknown')}
-                </p>
-                <p style="color: #333; font-size: 1rem; margin: 0.7rem 0; line-height: 1.6;">
-                    <strong style="color: #555;">Credits:</strong> {student_row.get('studied_credits', 'Unknown')}
-                </p>
-                <p style="color: #333; font-size: 1rem; margin: 0.7rem 0; line-height: 1.6;">
-                    <strong style="color: #555;">Module:</strong> {student_row.get('code_module', 'N/A')}
-                </p>
+            <div class="info-card" style="border-top-color: #764ba2;">
+                <h4 style="color: #764ba2 !important;">📖 Academic Background</h4>
+                <p><strong>Education:</strong> {student_row.get('highest_education', 'Unknown')}</p>
+                <p><strong>Attempts:</strong> {student_row.get('num_of_prev_attempts', 'Unknown')}</p>
+                <p><strong>Credits:</strong> {student_row.get('studied_credits', 'Unknown')}</p>
+                <p><strong>Module:</strong> {student_row.get('code_module', 'N/A')}</p>
             </div>
             """, unsafe_allow_html=True)
         
@@ -397,34 +615,14 @@ def display_student_info(student_id, df):
                 'Fail': '#dc3545',
                 'Distinction': '#ffc107',
                 'Withdrawn': '#6c757d'
-            }.get(result, '#333')
+            }.get(result, '#2d3748')
             st.markdown(f"""
-            <div style="background: white; 
-                        padding: 1.5rem; 
-                        border-radius: 12px; 
-                        box-shadow: 0 4px 15px rgba(0,0,0,0.12); 
-                        height: 100%;
-                        border-top: 4px solid #667eea;">
-                <h4 style="color: #667eea; 
-                           margin-top: 0; 
-                           font-size: 1.3rem;
-                           font-weight: 700;
-                           margin-bottom: 1rem;">
-                    📍 Socioeconomic Context
-                </h4>
-                <p style="color: #333; font-size: 1rem; margin: 0.7rem 0; line-height: 1.6;">
-                    <strong style="color: #555;">IMD Band:</strong> {student_row.get('imd_band', 'Unknown')}
-                </p>
-                <p style="color: #333; font-size: 1rem; margin: 0.7rem 0; line-height: 1.6;">
-                    <strong style="color: #555;">Region:</strong> {student_row.get('region', 'Unknown')}
-                </p>
-                <p style="color: #333; font-size: 1rem; margin: 0.7rem 0; line-height: 1.6;">
-                    <strong style="color: #555;">Presentation:</strong> {student_row.get('code_presentation', 'N/A')}
-                </p>
-                <p style="color: #333; font-size: 1rem; margin: 0.7rem 0; line-height: 1.6;">
-                    <strong style="color: #555;">Final Result:</strong> 
-                    <span style="color: {result_color}; font-weight: 700;">{result}</span>
-                </p>
+            <div class="info-card" style="border-top-color: #8b5cf6;">
+                <h4 style="color: #8b5cf6 !important;">📍 Socioeconomic Context</h4>
+                <p><strong>IMD Band:</strong> {student_row.get('imd_band', 'Unknown')}</p>
+                <p><strong>Region:</strong> {student_row.get('region', 'Unknown')}</p>
+                <p><strong>Presentation:</strong> {student_row.get('code_presentation', 'N/A')}</p>
+                <p><strong>Final Result:</strong> <span style="color: {result_color}; font-weight: 700;">{result}</span></p>
             </div>
             """, unsafe_allow_html=True)
         
@@ -540,25 +738,16 @@ def main():
     # Main content area
     # Animated header with gradient background - works in both themes
     st.markdown("""
-    <div style="text-align: center; padding: 2rem 0; 
-                background: linear-gradient(135deg, rgba(102,126,234,0.3) 0%, rgba(118,75,162,0.3) 100%); 
-                border-radius: 20px; 
-                margin-bottom: 2rem;
-                border: 2px solid rgba(255,255,255,0.5);
-                backdrop-filter: blur(10px);">
+    <div class="header-box" style="text-align: center;">
         <h1 style="font-size: 3.5rem; font-weight: 800; 
                    color: white !important;
-                   margin: 0; 
-                   text-shadow: 3px 3px 8px rgba(0,0,0,0.7),
-                               0px 0px 20px rgba(0,0,0,0.5);">
+                   margin: 0;">
             🤖 AI Academic Mentor
         </h1>
         <p style="font-size: 1.5rem; 
                   color: white !important; 
                   font-weight: 600;
                   margin-top: 1rem; 
-                  text-shadow: 2px 2px 6px rgba(0,0,0,0.8),
-                              0px 0px 15px rgba(0,0,0,0.6);
                   letter-spacing: 0.5px;">
             Empowering Students with Intelligent Insights
         </p>
@@ -577,44 +766,36 @@ def main():
     
     with col1:
         st.markdown("""
-        <div style="background: white; padding: 1.5rem; border-radius: 15px; 
-                    box-shadow: 0 4px 20px rgba(0,0,0,0.15); text-align: center;
-                    border-left: 5px solid #667eea;">
-            <h3 style="color: #667eea; margin: 0; font-size: 2.5rem; font-weight: 700;">{}</h3>
-            <p style="color: #333; margin: 0.5rem 0 0 0; font-size: 1rem; font-weight: 600;">Total Students</p>
+        <div class="stat-card" style="border-left: 5px solid #667eea;">
+            <h3 style="color: #667eea; margin: 0; font-size: 2.5rem; font-weight: 700; text-shadow: none !important;">{}</h3>
+            <p style="color: #4a5568; margin: 0.5rem 0 0 0; font-size: 1rem; font-weight: 600; text-shadow: none !important;">Total Students</p>
         </div>
         """.format(len(df)), unsafe_allow_html=True)
     
     with col2:
         pass_rate = (df['final_result'] == 'Pass').sum() / len(df) * 100 if 'final_result' in df.columns else 0
         st.markdown("""
-        <div style="background: white; padding: 1.5rem; border-radius: 15px; 
-                    box-shadow: 0 4px 20px rgba(0,0,0,0.15); text-align: center;
-                    border-left: 5px solid #28a745;">
-            <h3 style="color: #28a745; margin: 0; font-size: 2.5rem; font-weight: 700;">{:.1f}%</h3>
-            <p style="color: #333; margin: 0.5rem 0 0 0; font-size: 1rem; font-weight: 600;">Pass Rate</p>
+        <div class="stat-card" style="border-left: 5px solid #28a745;">
+            <h3 style="color: #28a745; margin: 0; font-size: 2.5rem; font-weight: 700; text-shadow: none !important;">{:.1f}%</h3>
+            <p style="color: #4a5568; margin: 0.5rem 0 0 0; font-size: 1rem; font-weight: 600; text-shadow: none !important;">Pass Rate</p>
         </div>
         """.format(pass_rate), unsafe_allow_html=True)
     
     with col3:
         avg_credits = df['studied_credits'].mean() if 'studied_credits' in df.columns else 0
         st.markdown("""
-        <div style="background: white; padding: 1.5rem; border-radius: 15px; 
-                    box-shadow: 0 4px 20px rgba(0,0,0,0.15); text-align: center;
-                    border-left: 5px solid #764ba2;">
-            <h3 style="color: #764ba2; margin: 0; font-size: 2.5rem; font-weight: 700;">{:.0f}</h3>
-            <p style="color: #333; margin: 0.5rem 0 0 0; font-size: 1rem; font-weight: 600;">Avg Credits</p>
+        <div class="stat-card" style="border-left: 5px solid #764ba2;">
+            <h3 style="color: #764ba2; margin: 0; font-size: 2.5rem; font-weight: 700; text-shadow: none !important;">{:.0f}</h3>
+            <p style="color: #4a5568; margin: 0.5rem 0 0 0; font-size: 1rem; font-weight: 600; text-shadow: none !important;">Avg Credits</p>
         </div>
         """.format(avg_credits), unsafe_allow_html=True)
     
     with col4:
         unique_courses = df['code_module'].nunique() if 'code_module' in df.columns else 0
         st.markdown("""
-        <div style="background: white; padding: 1.5rem; border-radius: 15px; 
-                    box-shadow: 0 4px 20px rgba(0,0,0,0.15); text-align: center;
-                    border-left: 5px solid #ffa502;">
-            <h3 style="color: #ffa502; margin: 0; font-size: 2.5rem; font-weight: 700;">{}</h3>
-            <p style="color: #333; margin: 0.5rem 0 0 0; font-size: 1rem; font-weight: 600;">Courses</p>
+        <div class="stat-card" style="border-left: 5px solid #ffa502;">
+            <h3 style="color: #ffa502; margin: 0; font-size: 2.5rem; font-weight: 700; text-shadow: none !important;">{}</h3>
+            <p style="color: #4a5568; margin: 0.5rem 0 0 0; font-size: 1rem; font-weight: 600; text-shadow: none !important;">Courses</p>
         </div>
         """.format(unique_courses), unsafe_allow_html=True)
     
@@ -622,23 +803,20 @@ def main():
     
     # Student selection in a beautiful container
     st.markdown("""
-    <div style="background: white; 
-                padding: 2.5rem; 
-                border-radius: 15px; 
-                box-shadow: 0 8px 32px rgba(0,0,0,0.15); 
-                margin-bottom: 2rem;
-                border-top: 5px solid #667eea;">
+    <div class="content-card" style="border-top: 5px solid #667eea; margin-bottom: 2rem;">
         <h2 style="color: #667eea; 
                    text-align: center; 
                    margin-top: 0;
                    font-size: 2rem;
-                   font-weight: 700;">
+                   font-weight: 700;
+                   text-shadow: none !important;">
             🎯 Select Student for Analysis
         </h2>
         <p style="text-align: center; 
-                  color: #666; 
+                  color: #4a5568; 
                   font-size: 1.1rem;
-                  margin-bottom: 1.5rem;">
+                  margin-bottom: 1.5rem;
+                  text-shadow: none !important;">
             Choose a student to generate personalized AI-powered insights
         </p>
     """, unsafe_allow_html=True)
@@ -757,34 +935,35 @@ def main():
     # Footer with system information
     st.markdown("<br><br>", unsafe_allow_html=True)
     st.markdown("""
-    <div style="background: white; padding: 2rem; border-radius: 15px; 
-                box-shadow: 0 8px 32px rgba(0,0,0,0.1); margin-top: 3rem;">
-        <h3 style="color: #667eea; text-align: center; margin-top: 0;">🔧 System Architecture</h3>
+    <div class="content-card" style="margin-top: 3rem;">
+        <h3 style="color: #667eea; text-align: center; margin-top: 0; font-size: 2rem; font-weight: 700; text-shadow: none !important;">
+            🔧 System Architecture
+        </h3>
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-top: 1.5rem;">
-            <div style="text-align: center; padding: 1rem;">
-                <div style="font-size: 2rem;">🤖</div>
+            <div class="arch-card">
+                <div style="font-size: 2.5rem;">🤖</div>
                 <strong>AI Model</strong>
-                <p style="font-size: 0.9rem; color: #666;">Groq Llama 3.1 8B</p>
+                <p>Groq Llama 3.1 8B</p>
             </div>
-            <div style="text-align: center; padding: 1rem;">
-                <div style="font-size: 2rem;">🧠</div>
+            <div class="arch-card">
+                <div style="font-size: 2.5rem;">🧠</div>
                 <strong>Framework</strong>
-                <p style="font-size: 0.9rem; color: #666;">LangGraph Agentic AI</p>
+                <p>LangGraph Agentic AI</p>
             </div>
-            <div style="text-align: center; padding: 1rem;">
-                <div style="font-size: 2rem;">📚</div>
+            <div class="arch-card">
+                <div style="font-size: 2.5rem;">📚</div>
                 <strong>Knowledge Base</strong>
-                <p style="font-size: 0.9rem; color: #666;">ChromaDB RAG</p>
+                <p>ChromaDB RAG</p>
             </div>
-            <div style="text-align: center; padding: 1rem;">
-                <div style="font-size: 2rem;">📈</div>
+            <div class="arch-card">
+                <div style="font-size: 2.5rem;">📈</div>
                 <strong>ML Pipeline</strong>
-                <p style="font-size: 0.9rem; color: #666;">GradientBoosting</p>
+                <p>GradientBoosting</p>
             </div>
-            <div style="text-align: center; padding: 1rem;">
-                <div style="font-size: 2rem;">📊</div>
+            <div class="arch-card">
+                <div style="font-size: 2.5rem;">📊</div>
                 <strong>Dataset</strong>
-                <p style="font-size: 0.9rem; color: #666;">OULAD</p>
+                <p>OULAD</p>
             </div>
         </div>
     </div>

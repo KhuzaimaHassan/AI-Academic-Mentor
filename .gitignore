@@ -60,6 +60,17 @@ Data_csv's/studentVle.csv
 *.bak
 *.cache
 
+# Scripts and helper files (local use only)
+*.bat
+*.sh
+setup_*.py
+
+# Documentation and reports (can be regenerated)
+*.pdf
+
+# Development containers
+.devcontainer/
+
 # Model files (optional - uncomment if models are too large)
 # 6_Models/*.pkl
 # 6_Models/vectorstore/

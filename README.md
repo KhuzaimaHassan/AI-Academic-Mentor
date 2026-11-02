@@ -12,6 +12,30 @@ Academic records and support resources often live in separate places. This proje
 
 **Status:** Hackathon prototype. The committed notebook records **64.8% held-out classification accuracy**. Prospective early-warning performance and the effectiveness of suggested interventions have not been established.
 
+## Live app and screenshots
+
+The hosted app was awakened, repaired, and re-tested on **November 2, 2026**. The dashboard and student selector worked, and a complete report for OULAD example **3733** was generated with `openai/gpt-oss-20b` and downloaded as Markdown. Its classifier prediction was **Withdrawn**, and the report included two retrieved guidance excerpts.
+
+These are actual hosted-interface captures, not mockups. The [dated live check](docs/LIVE_APP_CHECK_2026-11-02.md) records the original failures, repairs, successful sample run, and verification limits. This checks the workflow, not the accuracy or effectiveness of every generated recommendation. The app may sleep again after inactivity.
+
+### Dashboard
+
+![Live AI Academic Mentor dashboard showing OULAD summary statistics](docs/images/01-live-dashboard.jpg)
+
+The displayed totals summarize the dataset; they are not model-evaluation scores or proof that every record received a mentoring report.
+
+### Student profile
+
+![Live profile detail cards for OULAD example student 6516, showing academic background and recorded outcome](docs/images/02-student-profile.jpg)
+
+The profile's result card shows the recorded dataset outcome. It should not be read as a newly generated model prediction.
+
+### Generated mentoring report
+
+![Successful hosted report showing student ID, actual model prediction, and a mentoring draft](docs/images/04-successful-mentor-report.jpg)
+
+The repaired workflow includes the classifier prediction and retrieved source excerpts in the downloadable report. Generated advice remains a draft for human review. All three images were retaken from the hosted app after the UI contrast corrections.
+
 ## What is implemented
 
 | Component | Current behavior |

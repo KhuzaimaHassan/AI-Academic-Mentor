@@ -18,7 +18,7 @@ The hosted app was awakened, repaired, and re-tested on **November 2, 2026**. Th
 
 These are actual hosted-interface captures, not mockups. The [dated live check](docs/LIVE_APP_CHECK_2026-11-02.md) records the original failures, repairs, successful sample run, and verification limits. This checks the workflow, not the accuracy or effectiveness of every generated recommendation. The app may sleep again after inactivity.
 
-**Latest follow-up:** After the screenshot framing and source-display repair, a fresh report run failed at academic-guidance retrieval, including after a browser-session reload. The complete report image below preserves the earlier successful run; it is not proof that the latest hosted run passed.
+**Latest follow-up:** Guidance retrieval was repaired and a fresh hosted report completed for example 3733. The report captures below show that new run, including both guidance excerpts and the final download control. Generated advice still needs human review.
 
 ### Dashboard
 
@@ -34,11 +34,36 @@ The profile's result card shows the recorded dataset outcome. It should not be r
 
 ### Generated mentoring report
 
-![Complete hosted report including student ID, model prediction, mentoring draft, retrieved sources, and download button](docs/images/04-successful-mentor-report.jpg)
+![Fresh hosted report showing successful retrieval, student ID, model prediction, and report text](docs/images/report-live-01.jpg)
 
-Open the report image at full size to read the complete draft and source excerpts.
+The report is captured at the browser's native size so its text stays readable. Expand the remaining overlapping captures to follow the complete report through the source excerpts, disclaimer, and download button.
 
-The repaired workflow includes the classifier prediction and retrieved source excerpts in the downloadable report. Generated advice remains a draft for human review. All three images were retaken from the hosted app after the UI contrast corrections. The wider report capture predates the source-excerpt display repair and preserves that earlier run's rendering.
+<details>
+<summary>View the complete live report — remaining captures</summary>
+
+![Report part 2: questions and suggested next steps](docs/images/report-live-02.jpg)
+
+![Report part 3: next steps and uncertainty](docs/images/report-live-03.jpg)
+
+![Report part 4: retrieved guidance begins](docs/images/report-live-04.jpg)
+
+![Report part 5: first guidance excerpt continued](docs/images/report-live-05.jpg)
+
+![Report part 6: first guidance excerpt continued](docs/images/report-live-06.jpg)
+
+![Report part 7: first guidance excerpt continued](docs/images/report-live-07.jpg)
+
+![Report part 8: second guidance excerpt begins](docs/images/report-live-08.jpg)
+
+![Report part 9: second guidance excerpt continued](docs/images/report-live-09.jpg)
+
+![Report part 10: second guidance excerpt continued](docs/images/report-live-10.jpg)
+
+![Report part 11: final disclaimer and download button](docs/images/report-live-11.jpg)
+
+</details>
+
+These are genuine captures of the public OULAD demo after the retrieval repair. They preserve the actual generated wording; a successful workflow does not establish that every generated claim is supported.
 
 ## What is implemented
 
@@ -100,7 +125,7 @@ Assessment features aggregate the available records by student ID without a pred
 
 ### 1. Clone and install
 
-Python 3.11 is a recommended starting point. scikit-learn is pinned to **1.6.1**, the version recorded in the committed classifier and encoders. Other dependencies use lower bounds rather than a fully locked environment.
+Python 3.11 is a recommended starting point. scikit-learn is pinned to **1.6.1**, the version recorded in the committed classifier and encoders. ChromaDB **1.2.0** and langchain-chroma **1.0.0** are pinned to the tested guidance-index runtime. Remaining dependencies use lower bounds rather than a fully locked environment.
 
 ```bash
 git clone https://github.com/KhuzaimaHassan/AI-Academic-Mentor.git

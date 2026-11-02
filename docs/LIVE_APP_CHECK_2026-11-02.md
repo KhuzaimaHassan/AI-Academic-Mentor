@@ -2,9 +2,9 @@
 
 **Target:** [AI Academic Mentor](https://ai-academic-mentor.streamlit.app/)
 
-**Repaired deployment source:** `bd3f418460ea17bdb08ff364a0dceaebcaf76b9e`
+**Repaired deployment source:** `f28244c437348f31d5c609ab116d28b91c2e6683`
 
-**Latest outcome:** The app woke successfully. Dashboard/profile interaction, a complete mentoring report, and its Markdown download passed earlier sample checks after repair. During the later screenshot-framing follow-up, fresh report generation failed at academic-guidance retrieval, including after reloading the browser session. No download was offered for that failure. The underlying hosted retrieval error was not available in the public UI, so its cause remains unresolved.
+**Latest outcome:** After repair #11, a fresh hosted report completed for example 3733 with prediction Withdrawn and both guidance excerpts. Source text rendered without the earlier `[object Object]` corruption. Eleven overlapping native-size captures cover this report through its disclaimer and download control. Earlier download verification remains recorded separately below. The exact cause of the preceding hosted retrieval failure was not observable from the public UI; the repaired deployment uses the locally tested Chroma runtime and an absolute index path.
 
 ## Final checks after repair
 
@@ -13,16 +13,19 @@
 | Dashboard and student selector | Passed | The dashboard loaded and selecting 6516 updated the profile. The recorded profile outcome is distinct from a new classifier prediction. |
 | Hosted mentoring workflow | Passed for example 3733 | The public app reported completion with `openai/gpt-oss-20b`, the classifier, and guidance retrieval. The report displayed student ID 3733 and model prediction Withdrawn. |
 | Guidance provenance | Passed for this report | Two excerpts from `academic_success_guide.txt` appeared under Retrieved guidance. They are demonstration guidance, not an independently validated intervention evidence base. |
-| Markdown report download | Passed | Downloaded `mentor_report_3733.md`; inspected the 4,372-character file and confirmed the student ID, classifier prediction, two source labels, and absence of the earlier compilation-error text. |
-| Workflow and UI regression suite | Passed | All 11 tests passed, including failure paths, empty responses, UI download visibility, table rendering, and inference from committed classifier artifacts. Provider calls in automated tests use fixtures. |
+| Markdown report download | Earlier file check passed; latest file transfer unverified | Previously downloaded `mentor_report_3733.md` and inspected its 4,372 characters for the student ID, prediction and sources. The newest run displayed its download control, but the browser automation timed out waiting for a new download event; no fresh file transfer is claimed. |
+| Workflow and UI regression suite | Passed | All 16 tests passed, including missing/empty guidance stores, working-directory independence, actionable index errors, report rendering, failure paths and committed classifier inference. Provider calls in automated tests use fixtures. |
+| Real local guidance query | Passed | A temporary copy of the committed index retrieved both real excerpts (1,921 characters) using the pinned Chroma runtime and cached embedding model. The committed index was not rebuilt or changed. |
 | Real local classifier check | Passed | The committed artifacts loaded with scikit-learn 1.6.1 and predicted Withdrawn for 3733 and Pass for 6516. No model was retrained. |
 | UI contrast recheck | Passed for inspected surfaces | After repairs #7–#8, the hosted dashboard totals fit on one line in the current narrow view, profile selection updated to 6516, and another report completed for 3733. Computed styles confirmed a solid pale-green success alert with dark-green text and dark headings on white report cards. The refreshed screenshots show these surfaces. |
 | Output accuracy and intervention effectiveness | Not certified | Generated advice still needs human review. This sample test does not establish causal validity, perfect factuality, fairness, throughput, or effectiveness. |
 | Continuous availability | Not guaranteed | The visit woke the app. No periodic keep-alive monitor, billing change, or uptime guarantee was configured. |
 
-![Successful hosted mentoring report](images/04-successful-mentor-report.jpg)
+![Fresh successful hosted mentoring report after retrieval repair](images/report-live-01.jpg)
 
-The complete report screenshot captures the same successful contrast-check generation that followed the 4,372-character download checked above. It asserted that the student had expressed uncertainty about remaining enrolled and had not earned credits; those assertions were unsupported by the supplied profile. It also preserves the source-excerpt rendering defect from before repair #9. The wider replacement includes the complete report and download button. Fresh generation after repair #9 failed at retrieval, so the new renderer has automated-test coverage but has not yet passed a hosted report check.
+The [complete capture sequence in the README](../README.md#generated-mentoring-report) replaces the blurry enlarged image. Its overlapping frames are raw native-size browser screenshots, not resized images or saved-report recreations. The report still assumes credits have not been earned and presupposes withdrawal consideration; those claims are not established by the supplied profile. Generated advice remains a draft for review.
+
+The [earlier enlarged capture](images/04-successful-mentor-report.jpg) is retained only as historical evidence. It predates source-display repair #9 and preserves its old rendering defect. The latest report confirms that the repaired source renderer also executes successfully on the hosted app.
 
 ## Initial checks before repair
 
@@ -70,7 +73,8 @@ The initial provider response stated that the configured model did not exist or 
 - A clean dependency rebuild was requested after the page picked up new rendering while an older workflow module remained in memory. The final live report included the new deterministic evidence section, confirming that the updated workflow executed. See [runtime update #6](https://github.com/KhuzaimaHassan/AI-Academic-Mentor/pull/6).
 - Text colors now follow their surface: light text on the deeper purple background, dark text and headings on white cards, and solid alert backgrounds with readable status text. Button, dropdown, table, and status colors were also adjusted. Both existing UI tests passed; selected text/background pairs exceed 4.5:1 contrast. This is not a complete accessibility audit. See [UI contrast repair #7](https://github.com/KhuzaimaHassan/AI-Academic-Mentor/pull/7).
 - The expanded report capture exposed corrupted source-excerpt lines rendered as `[object Object]`. Escaped multiline excerpts now use a plain pre-wrapped block instead of Streamlit's nested code-widget renderer. Both UI tests passed, including an indented multiline-source and HTML-escaping regression. See [source display repair #9](https://github.com/KhuzaimaHassan/AI-Academic-Mentor/pull/9).
+- The later hosted retrieval failure was followed by a successful local query of the committed index. Deployment now pins ChromaDB 1.2.0 and langchain-chroma 1.0.0, resolves the default index path from the repository, and rejects missing/empty stores rather than implicitly creating an empty collection. All 16 regressions and the real local query passed; a fresh hosted report then completed. See [retrieval repair #11](https://github.com/KhuzaimaHassan/AI-Academic-Mentor/pull/11).
 
 The sidebar now reports the configured model and explains when workflow checks occur; its old unconditional health badges were removed.
 
-Screenshots are genuine captures of the public OULAD demo. The dashboard uses the earlier narrow view; the profile and report were replaced using a wider browser layout at the owner's request so their text and bottom edges fit. Only the error image is retained from the initial check as historical evidence. Summary-card spacing was also adjusted to keep dashboard totals on one line in narrow views; see [layout repair #8](https://github.com/KhuzaimaHassan/AI-Academic-Mentor/pull/8). No private student records, provider credentials, or account-management screens were captured. No model training, vector-store rebuild, batch run, or credential change was performed.
+Screenshots are genuine captures of the public OULAD demo. The dashboard uses the earlier narrow view and the profile uses the requested wider layout. The latest report uses eleven overlapping native-size frames because enlarging a single browser capture softened the text. Summary-card spacing also keeps dashboard totals on one line in narrow views; see [layout repair #8](https://github.com/KhuzaimaHassan/AI-Academic-Mentor/pull/8). Historical error and enlarged report images are identified separately. No private student records, provider credentials, or account-management screens were captured. No model training, vector-store rebuild, batch run, or credential change was performed.

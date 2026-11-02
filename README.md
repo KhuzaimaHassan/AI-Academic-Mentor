@@ -14,9 +14,9 @@ Academic records and support resources often live in separate places. This proje
 
 ## Live app and screenshots
 
-The hosted app was awakened and checked on **November 2, 2026**. The dashboard and student selector loaded, and switching students updated the profile. **Report generation did not pass:** Groq returned `404 model_not_found` for the configured `llama-3.1-8b-instant` model. The app currently displays that failure inside its report card and still offers it as a download.
+The hosted app was awakened, repaired, and re-tested on **November 2, 2026**. The dashboard and student selector worked, and a complete report for OULAD example **3733** was generated with `openai/gpt-oss-20b` and downloaded as Markdown. Its classifier prediction was **Withdrawn**, and the report included two retrieved guidance excerpts.
 
-These are screenshots of the actual hosted interface, not mockups. The sidebar's status badges are static labels, so they do not establish model or retrieval health. See the [live check and reproduction steps](docs/LIVE_APP_CHECK_2026-11-02.md) for the observed failure and verification limits. The app may sleep again after inactivity.
+These are actual hosted-interface captures, not mockups. The [dated live check](docs/LIVE_APP_CHECK_2026-11-02.md) records the original failures, repairs, successful sample run, and verification limits. This checks the workflow, not the accuracy or effectiveness of every generated recommendation. The app may sleep again after inactivity.
 
 ### Dashboard
 
@@ -29,6 +29,12 @@ The displayed totals summarize the dataset; they are not model-evaluation scores
 ![Live profile for OULAD example student 6516, showing education, credits, attempts, and recorded outcome](docs/images/02-student-profile.jpg)
 
 The profile's result card shows the recorded dataset outcome. It should not be read as a newly generated model prediction.
+
+### Generated mentoring report
+
+![Successful hosted report showing student ID, actual model prediction, and a mentoring draft](docs/images/04-successful-mentor-report.jpg)
+
+The repaired workflow includes the classifier prediction and retrieved source excerpts in the downloadable report. Generated advice remains a draft for human review. Dashboard and profile images were captured during the initial wake-up check; the report image was captured after repair.
 
 ## What is implemented
 

@@ -28,7 +28,12 @@ class ReportInterfaceTests(unittest.TestCase):
 
     def test_success_exposes_report_download(self):
         agent = Mock(model_name="test-model")
-        agent.run_student_analysis.return_value = "# Mentor Report\n\n| Step | Action |\n| --- | --- |\n| 1 | Review a study plan |"
+        agent.run_student_analysis.return_value = (
+            "# Mentor Report\n\n| Step | Action |\n| --- | --- |\n| 1 | Review a study plan |"
+            "\n\nSource excerpt:\n\n    1. Create a Study Schedule\n"
+            "    - Include breaks\n\n    2. Set Clear Goals\n"
+            "    - Use <script> as literal source text\n"
+        )
         with patch("agentic_ai_pipeline.AgenticAIPipeline", return_value=agent):
             app = AppTest.from_file(str(ROOT / "9_Deployment/app.py"))
             app.secrets["groq"] = {"GROQ_MODEL": "test-model"}
@@ -38,6 +43,12 @@ class ReportInterfaceTests(unittest.TestCase):
             self.assertEqual(len(app.error), 0, [error.value for error in app.error])
             self.assertEqual(len(app.get("download_button")), 1)
             self.assertTrue(any("<table>" in block.value for block in app.markdown))
+            report_html = next(block.value for block in app.markdown if "<table>" in block.value)
+            self.assertIn('<div class="report-source-block">', report_html)
+            self.assertNotIn("<pre><code>", report_html)
+            self.assertIn("2. Set Clear Goals", report_html)
+            self.assertIn("&amp;lt;script&amp;gt;", report_html)
+            self.assertNotIn("<script>", report_html)
 
 
 if __name__ == "__main__":

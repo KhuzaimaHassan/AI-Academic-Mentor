@@ -588,6 +588,17 @@ st.markdown("""
         text-decoration: underline;
     }
 
+    .report-source-block {
+        white-space: pre-wrap;
+        overflow-wrap: anywhere;
+        background: #f8fafc;
+        color: #172033;
+        border: 1px solid #cbd5e1;
+        border-radius: 8px;
+        padding: 1rem;
+        margin: 1rem 0;
+    }
+
     [data-testid="stMarkdownContainer"] code {
         color: #312e81 !important;
         background: #eef2ff !important;
@@ -1044,6 +1055,12 @@ def main():
                     # --- FIXED REPORT RENDERING ---
                     # Convert the Markdown report string to HTML
                     report_as_html = markdown.markdown(escape(final_report), extensions=["tables"])
+                    # Streamlit reinterprets nested pre/code HTML as a code widget,
+                    # corrupting multiline source excerpts into [object Object].
+                    # Preserve the escaped excerpt text without that widget renderer.
+                    report_as_html = report_as_html.replace(
+                        "<pre><code>", '<div class="report-source-block">'
+                    ).replace("</code></pre>", "</div>")
                     
                     # Render everything in a single st.markdown call to keep it contained
                     st.markdown(f"""

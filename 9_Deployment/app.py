@@ -911,7 +911,7 @@ def main():
                     
                     # --- FIXED REPORT RENDERING ---
                     # Convert the Markdown report string to HTML
-                    report_as_html = markdown.markdown(escape(final_report))
+                    report_as_html = markdown.markdown(escape(final_report), extensions=["tables"])
                     
                     # Render everything in a single st.markdown call to keep it contained
                     st.markdown(f"""

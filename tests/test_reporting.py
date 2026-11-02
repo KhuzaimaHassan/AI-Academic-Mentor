@@ -47,6 +47,9 @@ class ReportWorkflowTests(unittest.TestCase):
         ]
         report = self.make_agent().run_student_analysis(123)
         self.assertIn("# Mentor Report", report)
+        self.assertIn("**Model prediction:** Pass", report)
+        self.assertIn("Source 1 (guide.txt): Plan study time.", report)
+        self.assertIn("AI-generated draft for human review", report)
         self.assertEqual(self.llm.invoke.call_count, 3)
         self.prediction_mock.assert_called_once_with(123)
         self.rag.get_intervention_advice.assert_called_once_with("study planning")

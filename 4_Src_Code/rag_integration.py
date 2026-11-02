@@ -23,12 +23,18 @@ from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_core.documents import Document
 import pandas as pd
 from pathlib import Path
+from reporting import MentorReportError
+
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
 
 class RAGIntegration:
     """Implements RAG system using ChromaDB for academic knowledge base"""
     
-    def __init__(self, persist_directory: str = "6_Models/vectorstore"):
-        self.persist_directory = persist_directory
+    def __init__(self, persist_directory: str = None):
+        self.persist_directory = str(
+            Path(persist_directory).resolve() if persist_directory is not None
+            else PROJECT_ROOT / "6_Models/vectorstore"
+        )
         self.embeddings = HuggingFaceEmbeddings(
             model_name="sentence-transformers/all-MiniLM-L6-v2"
         )
@@ -38,10 +44,10 @@ class RAGIntegration:
             length_function=len,
         )
         self.vectorstore = None
-        self.knowledge_base_path = "1_Documentation/RAG_Knowledge_Base"
+        self.knowledge_base_path = str(PROJECT_ROOT / "1_Documentation/RAG_Knowledge_Base")
         
         # Ensure directories exist
-        os.makedirs(persist_directory, exist_ok=True)
+        os.makedirs(self.persist_directory, exist_ok=True)
         os.makedirs(self.knowledge_base_path, exist_ok=True)
     
     def create_knowledge_base_from_data(self, datasets: Dict[str, pd.DataFrame]) -> None:
@@ -145,13 +151,19 @@ class RAGIntegration:
     def load_vectorstore(self) -> bool:
         """Load existing vector store"""
         try:
+            if not (Path(self.persist_directory) / "chroma.sqlite3").is_file():
+                raise FileNotFoundError("The persisted guidance database is missing.")
             self.vectorstore = Chroma(
                 persist_directory=self.persist_directory,
-                embedding_function=self.embeddings
+                embedding_function=self.embeddings,
+                create_collection_if_not_exists=False,
             )
+            if not self.vectorstore.get(limit=1)["ids"]:
+                raise ValueError("The persisted guidance collection is empty.")
             print("Vector store loaded successfully")
             return True
         except Exception as e:
+            self.vectorstore = None
             print(f"Failed to load vector store: {e}")
             return False
     
@@ -310,7 +322,10 @@ class RAGIntegration:
             retriever = self.get_rag_retriever()
             
             if retriever is None:
-                raise RuntimeError("The knowledge-base retriever is unavailable.")
+                raise MentorReportError(
+                    "The deployed guidance index is missing, empty, or could not be opened. "
+                    "Restore 6_Models/vectorstore with the tested Chroma runtime."
+                )
             
             # Retrieve relevant documents
             retrieved_docs = retriever.invoke(query)
@@ -337,4 +352,6 @@ class RAGIntegration:
         except Exception as e:
             error_msg = f"❌ Error getting intervention advice: {e}"
             print(error_msg)
+            if isinstance(e, MentorReportError):
+                raise
             raise RuntimeError("Academic guidance retrieval failed.") from e

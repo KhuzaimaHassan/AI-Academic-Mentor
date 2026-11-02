@@ -18,6 +18,8 @@ The hosted app was awakened, repaired, and re-tested on **November 2, 2026**. Th
 
 These are actual hosted-interface captures, not mockups. The [dated live check](docs/LIVE_APP_CHECK_2026-11-02.md) records the original failures, repairs, successful sample run, and verification limits. This checks the workflow, not the accuracy or effectiveness of every generated recommendation. The app may sleep again after inactivity.
 
+**Latest follow-up:** After the screenshot framing and source-display repair, a fresh report run failed at academic-guidance retrieval, including after a browser-session reload. The complete report image below preserves the earlier successful run; it is not proof that the latest hosted run passed.
+
 ### Dashboard
 
 ![Live AI Academic Mentor dashboard showing OULAD summary statistics](docs/images/01-live-dashboard.jpg)
@@ -26,15 +28,17 @@ The displayed totals summarize the dataset; they are not model-evaluation scores
 
 ### Student profile
 
-![Live profile detail cards for OULAD example student 6516, showing academic background and recorded outcome](docs/images/02-student-profile.jpg)
+![Complete live profile for OULAD example student 6516, including summary values, detail cards, and chart](docs/images/02-student-profile.jpg)
 
 The profile's result card shows the recorded dataset outcome. It should not be read as a newly generated model prediction.
 
 ### Generated mentoring report
 
-![Successful hosted report showing student ID, actual model prediction, and a mentoring draft](docs/images/04-successful-mentor-report.jpg)
+![Complete hosted report including student ID, model prediction, mentoring draft, retrieved sources, and download button](docs/images/04-successful-mentor-report.jpg)
 
-The repaired workflow includes the classifier prediction and retrieved source excerpts in the downloadable report. Generated advice remains a draft for human review. All three images were retaken from the hosted app after the UI contrast corrections.
+Open the report image at full size to read the complete draft and source excerpts.
+
+The repaired workflow includes the classifier prediction and retrieved source excerpts in the downloadable report. Generated advice remains a draft for human review. All three images were retaken from the hosted app after the UI contrast corrections. The wider report capture predates the source-excerpt display repair and preserves that earlier run's rendering.
 
 ## What is implemented
 

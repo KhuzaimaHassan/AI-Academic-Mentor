@@ -12,6 +12,24 @@ Academic records and support resources often live in separate places. This proje
 
 **Status:** Hackathon prototype. The committed notebook records **64.8% held-out classification accuracy**. Prospective early-warning performance and the effectiveness of suggested interventions have not been established.
 
+## Live app and screenshots
+
+The hosted app was awakened and checked on **November 2, 2026**. The dashboard and student selector loaded, and switching students updated the profile. **Report generation did not pass:** Groq returned `404 model_not_found` for the configured `llama-3.1-8b-instant` model. The app currently displays that failure inside its report card and still offers it as a download.
+
+These are screenshots of the actual hosted interface, not mockups. The sidebar's status badges are static labels, so they do not establish model or retrieval health. See the [live check and reproduction steps](docs/LIVE_APP_CHECK_2026-11-02.md) for the observed failure and verification limits. The app may sleep again after inactivity.
+
+### Dashboard
+
+![Live AI Academic Mentor dashboard showing OULAD summary statistics](docs/images/01-live-dashboard.jpg)
+
+The displayed totals summarize the dataset; they are not model-evaluation scores or proof that every record received a mentoring report.
+
+### Student profile
+
+![Live profile for OULAD example student 6516, showing education, credits, attempts, and recorded outcome](docs/images/02-student-profile.jpg)
+
+The profile's result card shows the recorded dataset outcome. It should not be read as a newly generated model prediction.
+
 ## What is implemented
 
 | Component | Current behavior |

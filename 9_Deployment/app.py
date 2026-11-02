@@ -45,7 +45,7 @@ st.markdown("""
     
     /* Force gradient background across all themes */
     .main, .block-container, .stApp {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+        background: linear-gradient(135deg, #4338ca 0%, #4c1d95 100%) !important;
         background-attachment: fixed !important;
     }
     
@@ -80,7 +80,7 @@ st.markdown("""
        ============================================ */
     
     [data-testid="stSidebar"] {
-        background: linear-gradient(180deg, #667eea 0%, #764ba2 100%) !important;
+        background: linear-gradient(180deg, #4338ca 0%, #4c1d95 100%) !important;
         box-shadow: 4px 0 15px rgba(0,0,0,0.1);
     }
     
@@ -102,7 +102,7 @@ st.markdown("""
        ============================================ */
     
     .stButton>button, .stDownloadButton>button {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+        background: linear-gradient(135deg, #4338ca 0%, #4c1d95 100%) !important;
         color: white !important;
         border: none !important;
         padding: 0.75rem 2.5rem !important;
@@ -119,7 +119,7 @@ st.markdown("""
     .stButton>button:hover, .stDownloadButton>button:hover {
         transform: translateY(-3px) !important;
         box-shadow: 0 8px 30px rgba(102, 126, 234, 0.6) !important;
-        background: linear-gradient(135deg, #7b8ff0 0%, #8a5fb8 100%) !important;
+        background: linear-gradient(135deg, #4f46e5 0%, #6b21a8 100%) !important;
     }
     
     .stButton>button:active, .stDownloadButton>button:active {
@@ -169,7 +169,7 @@ st.markdown("""
     
     /* Dropdown arrow */
     .stSelectbox svg {
-        fill: #667eea !important;
+        fill: #4338ca !important;
         width: 24px !important;
         height: 24px !important;
     }
@@ -197,7 +197,7 @@ st.markdown("""
     
     /* Target the hover state */
     [role="option"]:hover {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+        background: linear-gradient(135deg, #4338ca 0%, #4c1d95 100%) !important;
         color: white !important;
         border-radius: 8px !important;
         margin: 0 0.5rem !important;
@@ -235,7 +235,7 @@ st.markdown("""
     }
     
     .stMetric [data-testid="stMetricValue"] {
-        color: #667eea !important;
+        color: #4338ca !important;
         font-size: 2.5rem !important;
         font-weight: 800 !important;
     }
@@ -245,12 +245,12 @@ st.markdown("""
        ============================================ */
     
     .stProgress > div > div {
-        background: linear-gradient(90deg, #667eea 0%, #764ba2 100%) !important;
+        background: linear-gradient(90deg, #4338ca 0%, #4c1d95 100%) !important;
         border-radius: 10px !important;
     }
     
     .stSpinner > div {
-        border-top-color: #667eea !important;
+        border-top-color: #4338ca !important;
     }
     
     /* ============================================
@@ -370,7 +370,7 @@ st.markdown("""
         border-radius: 12px !important;
         padding: 1.75rem !important;
         box-shadow: 0 4px 15px rgba(0,0,0,0.1) !important;
-        border-top: 4px solid #667eea !important;
+        border-top: 4px solid #4338ca !important;
         height: 100% !important;
         transition: all 0.3s ease !important;
     }
@@ -381,7 +381,7 @@ st.markdown("""
     }
     
     .info-card h4 {
-        color: #667eea !important;
+        color: #4338ca !important;
         margin: 0 0 1rem 0 !important;
         font-size: 1.3rem !important;
         font-weight: 700 !important;
@@ -444,7 +444,7 @@ st.markdown("""
        ============================================ */
     
     .stMarkdown {
-        color: #2d3748 !important;
+        color: #f8fafc !important;
     }
     
     /* In white cards, ensure text is dark and no shadows */
@@ -470,6 +470,129 @@ st.markdown("""
         text-shadow: none !important;
     }
     
+    /* Surface-specific contrast. Streamlit alerts use test IDs, not .stSuccess. */
+    :is(.content-card, .stat-card, .info-card) {
+        color: #172033 !important;
+    }
+
+    :is(.content-card, .stat-card, .info-card)
+    :is(p, li, ul, ol, span, strong, em, blockquote, td, th, pre) {
+        color: #172033 !important;
+        text-shadow: none !important;
+    }
+
+    :is(.content-card, .stat-card, .info-card) :is(h1, h2, h3, h4, h5, h6) {
+        color: #312e81 !important;
+        text-shadow: none !important;
+    }
+
+    .header-box, .header-box :is(h1, h2, h3, p, span) {
+        color: #ffffff !important;
+        text-shadow: none !important;
+    }
+
+    [data-testid="stCaptionContainer"] {
+        color: #e2e8f0 !important;
+        opacity: 1 !important;
+    }
+
+    [data-testid="stAlertContainer"] {
+        --alert-ink: #1e3a8a;
+        background: #eff6ff !important;
+        color: var(--alert-ink) !important;
+        border: 1px solid #93c5fd !important;
+        border-left: 4px solid #1d4ed8 !important;
+        border-radius: 10px !important;
+    }
+
+    [data-testid="stAlertContainer"]:has([data-testid="stAlertContentSuccess"]) {
+        --alert-ink: #14532d;
+        background: #ecfdf5 !important;
+        border-color: #86efac !important;
+        border-left-color: #15803d !important;
+    }
+
+    [data-testid="stAlertContainer"]:has([data-testid="stAlertContentError"]) {
+        --alert-ink: #7f1d1d;
+        background: #fef2f2 !important;
+        border-color: #fca5a5 !important;
+        border-left-color: #b91c1c !important;
+    }
+
+    [data-testid="stAlertContainer"]:has([data-testid="stAlertContentWarning"]) {
+        --alert-ink: #78350f;
+        background: #fffbeb !important;
+        border-color: #fcd34d !important;
+        border-left-color: #b45309 !important;
+    }
+
+    [data-testid="stAlertContainer"] *,
+    [data-testid="stSidebar"] [data-testid="stAlertContainer"] * {
+        color: var(--alert-ink) !important;
+        text-shadow: none !important;
+    }
+
+    .stButton > button *, .stDownloadButton > button * {
+        color: #ffffff !important;
+    }
+
+    .stButton > button:disabled, .stDownloadButton > button:disabled {
+        background: #cbd5e1 !important;
+        color: #334155 !important;
+        opacity: 1 !important;
+    }
+
+    .stButton > button:disabled *, .stDownloadButton > button:disabled * {
+        color: #334155 !important;
+    }
+
+    [role="option"][aria-selected="true"] {
+        background: #e0e7ff !important;
+        color: #312e81 !important;
+    }
+
+    [role="option"][aria-selected="true"]:hover {
+        background: #4338ca !important;
+        color: #ffffff !important;
+    }
+
+    [data-testid="stExpander"] {
+        background: #ffffff !important;
+        color: #172033 !important;
+        border-color: #cbd5e1 !important;
+        border-radius: 10px !important;
+    }
+
+    [data-testid="stExpander"] :is(summary, p, li, span, h1, h2, h3, h4) {
+        color: #172033 !important;
+        text-shadow: none !important;
+    }
+
+    .content-card table {
+        background: #ffffff !important;
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    .content-card :is(th, td) {
+        border: 1px solid #cbd5e1;
+        padding: 0.6rem 0.75rem;
+    }
+
+    .content-card th {
+        background: #eef2ff !important;
+    }
+
+    .content-card a {
+        color: #4338ca !important;
+        text-decoration: underline;
+    }
+
+    [data-testid="stMarkdownContainer"] code {
+        color: #312e81 !important;
+        background: #eef2ff !important;
+    }
+
     /* ============================================
        ACCESSIBILITY & POLISH
        ============================================ */
@@ -481,7 +604,7 @@ st.markdown("""
     
     /* Focus states for accessibility */
     *:focus {
-        outline: 2px solid #667eea !important;
+        outline: 2px solid #4338ca !important;
         outline-offset: 2px !important;
     }
     
@@ -538,7 +661,7 @@ def display_student_info(student_id, df):
         
         # Header with student ID
         st.markdown(f"""
-        <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+        <div style="background: linear-gradient(135deg, #4338ca 0%, #4c1d95 100%);
                     padding: 2rem; 
                     border-radius: 15px; 
                     text-align: center; 
@@ -624,8 +747,8 @@ def display_student_info(student_id, df):
         
         with col2:
             st.markdown(f"""
-            <div class="info-card" style="border-top-color: #764ba2;">
-                <h4 style="color: #764ba2 !important;">📖 Academic Background</h4>
+            <div class="info-card" style="border-top-color: #4c1d95;">
+                <h4 style="color: #4c1d95 !important;">📖 Academic Background</h4>
                 <p><strong>Education:</strong> {student_row.get('highest_education', 'Unknown')}</p>
                 <p><strong>Attempts:</strong> {student_row.get('num_of_prev_attempts', 'Unknown')}</p>
                 <p><strong>Credits:</strong> {student_row.get('studied_credits', 'Unknown')}</p>
@@ -636,14 +759,14 @@ def display_student_info(student_id, df):
         with col3:
             result = student_row.get('final_result', 'Unknown')
             result_color = {
-                'Pass': '#28a745',
-                'Fail': '#dc3545',
-                'Distinction': '#ffc107',
-                'Withdrawn': '#6c757d'
+                'Pass': '#166534',
+                'Fail': '#991b1b',
+                'Distinction': '#92400e',
+                'Withdrawn': '#475569'
             }.get(result, '#2d3748')
             st.markdown(f"""
-            <div class="info-card" style="border-top-color: #8b5cf6;">
-                <h4 style="color: #8b5cf6 !important;">📍 Socioeconomic Context</h4>
+            <div class="info-card" style="border-top-color: #6b21a8;">
+                <h4 style="color: #6b21a8 !important;">📍 Socioeconomic Context</h4>
                 <p><strong>IMD Band:</strong> {student_row.get('imd_band', 'Unknown')}</p>
                 <p><strong>Region:</strong> {student_row.get('region', 'Unknown')}</p>
                 <p><strong>Presentation:</strong> {student_row.get('code_presentation', 'N/A')}</p>
@@ -669,7 +792,7 @@ def display_student_info(student_id, df):
                 x=categories,
                 y=values,
                 marker=dict(
-                    color=['#667eea', '#764ba2', '#a8a3ea'],
+                    color=['#4338ca', '#4c1d95', '#a8a3ea'],
                     line=dict(color='white', width=2)
                 ),
                 text=[f'{v:.0f}' for v in values],
@@ -790,8 +913,8 @@ def main():
     
     with col1:
         st.markdown("""
-        <div class="stat-card" style="border-left: 5px solid #667eea;">
-            <h3 style="color: #667eea !important; margin: 0; font-size: 2.5rem; font-weight: 700; text-shadow: none !important;">{}</h3>
+        <div class="stat-card" style="border-left: 5px solid #4338ca;">
+            <h3 style="color: #4338ca !important; margin: 0; font-size: 2.5rem; font-weight: 700; text-shadow: none !important;">{}</h3>
             <p style="color: #4a5568 !important; margin: 0.5rem 0 0 0; font-size: 1rem; font-weight: 600; text-shadow: none !important;">Total Students</p>
         </div>
         """.format(len(df)), unsafe_allow_html=True)
@@ -799,8 +922,8 @@ def main():
     with col2:
         pass_rate = (df['final_result'] == 'Pass').sum() / len(df) * 100 if 'final_result' in df.columns else 0
         st.markdown("""
-        <div class="stat-card" style="border-left: 5px solid #28a745;">
-            <h3 style="color: #28a745 !important; margin: 0; font-size: 2.5rem; font-weight: 700; text-shadow: none !important;">{:.1f}%</h3>
+        <div class="stat-card" style="border-left: 5px solid #166534;">
+            <h3 style="color: #166534 !important; margin: 0; font-size: 2.5rem; font-weight: 700; text-shadow: none !important;">{:.1f}%</h3>
             <p style="color: #4a5568 !important; margin: 0.5rem 0 0 0; font-size: 1rem; font-weight: 600; text-shadow: none !important;">Pass Rate</p>
         </div>
         """.format(pass_rate), unsafe_allow_html=True)
@@ -808,8 +931,8 @@ def main():
     with col3:
         avg_credits = df['studied_credits'].mean() if 'studied_credits' in df.columns else 0
         st.markdown("""
-        <div class="stat-card" style="border-left: 5px solid #764ba2;">
-            <h3 style="color: #764ba2 !important; margin: 0; font-size: 2.5rem; font-weight: 700; text-shadow: none !important;">{:.0f}</h3>
+        <div class="stat-card" style="border-left: 5px solid #4c1d95;">
+            <h3 style="color: #4c1d95 !important; margin: 0; font-size: 2.5rem; font-weight: 700; text-shadow: none !important;">{:.0f}</h3>
             <p style="color: #4a5568 !important; margin: 0.5rem 0 0 0; font-size: 1rem; font-weight: 600; text-shadow: none !important;">Avg Credits</p>
         </div>
         """.format(avg_credits), unsafe_allow_html=True)
@@ -817,8 +940,8 @@ def main():
     with col4:
         unique_courses = df['code_module'].nunique() if 'code_module' in df.columns else 0
         st.markdown("""
-        <div class="stat-card" style="border-left: 5px solid #ffa502;">
-            <h3 style="color: #ffa502 !important; margin: 0; font-size: 2.5rem; font-weight: 700; text-shadow: none !important;">{}</h3>
+        <div class="stat-card" style="border-left: 5px solid #92400e;">
+            <h3 style="color: #92400e !important; margin: 0; font-size: 2.5rem; font-weight: 700; text-shadow: none !important;">{}</h3>
             <p style="color: #4a5568 !important; margin: 0.5rem 0 0 0; font-size: 1rem; font-weight: 600; text-shadow: none !important;">Courses</p>
         </div>
         """.format(unique_courses), unsafe_allow_html=True)
@@ -827,8 +950,8 @@ def main():
     
     # Student selection in a beautiful container
     st.markdown("""
-    <div class="content-card" style="border-top: 5px solid #667eea; margin-bottom: 2rem;">
-        <h2 style="color: #667eea !important; 
+    <div class="content-card" style="border-top: 5px solid #4338ca; margin-bottom: 2rem;">
+        <h2 style="color: #4338ca !important;
                    text-align: center; 
                    margin-top: 0;
                    font-size: 2rem;
@@ -877,7 +1000,7 @@ def main():
             progress_bar = st.progress(0)
             
             progress_text.markdown("""
-            <h3 style="color: #667eea; font-size: 1.5rem; font-weight: 700; text-align: center;">
+            <h3 style="color: #4338ca; font-size: 1.5rem; font-weight: 700; text-align: center;">
                 🤖 AI Mentor is analyzing...
             </h3>
             """, unsafe_allow_html=True)
@@ -886,7 +1009,7 @@ def main():
             try:
                     # Initialize the LangGraph agent
                     progress_text.markdown("""
-                    <h3 style="color: #764ba2; font-size: 1.5rem; font-weight: 700; text-align: center;">
+                    <h3 style="color: #4c1d95; font-size: 1.5rem; font-weight: 700; text-align: center;">
                         🧠 Initializing AI agents...
                     </h3>
                     """, unsafe_allow_html=True)
@@ -895,7 +1018,7 @@ def main():
                     
                     # Call the LangGraph function
                     progress_text.markdown("""
-                    <h3 style="color: #28a745; font-size: 1.5rem; font-weight: 700; text-align: center;">
+                    <h3 style="color: #166534; font-size: 1.5rem; font-weight: 700; text-align: center;">
                         📊 Analyzing student data...
                     </h3>
                     """, unsafe_allow_html=True)
@@ -915,8 +1038,8 @@ def main():
                     
                     # Render everything in a single st.markdown call to keep it contained
                     st.markdown(f"""
-                    <div class="content-card" style="border-top: 5px solid #667eea; margin-top: 2rem;">
-                        <h2 style="color: #667eea !important;
+                    <div class="content-card" style="border-top: 5px solid #4338ca; margin-top: 2rem;">
+                        <h2 style="color: #4338ca !important;
                                    text-align: center;
                                    margin-top: 0;
                                    font-size: 2.2rem;
@@ -964,7 +1087,7 @@ def main():
     st.markdown("<br><br>", unsafe_allow_html=True)
     st.markdown("""
     <div class="content-card" style="margin-top: 3rem;">
-        <h3 style="color: #667eea; text-align: center; margin-top: 0; font-size: 2rem; font-weight: 700; text-shadow: none !important;">
+        <h3 style="color: #4338ca; text-align: center; margin-top: 0; font-size: 2rem; font-weight: 700; text-shadow: none !important;">
             🔧 System Architecture
         </h3>
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-top: 1.5rem;">

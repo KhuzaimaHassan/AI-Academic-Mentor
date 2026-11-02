@@ -302,6 +302,8 @@ class AgenticAIPipeline:
             
         except Exception as e:
             print(f"❌ Error getting RAG advice: {e}")
+            if isinstance(e, MentorReportError):
+                raise
             raise MentorReportError("Academic guidance could not be retrieved. Check the knowledge-base index.") from e
     
     def compile_final_report(self, state: AgentState) -> AgentState:

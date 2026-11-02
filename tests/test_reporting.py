@@ -92,6 +92,17 @@ class ReportWorkflowTests(unittest.TestCase):
         with self.assertRaisesRegex(MentorReportError, "empty"):
             self.make_agent().run_student_analysis(123)
 
+    def test_guidance_index_action_is_preserved_for_the_user(self):
+        self.llm.invoke.side_effect = [
+            SimpleNamespace(content="Analysis."), SimpleNamespace(content="study planning")
+        ]
+        self.rag.get_intervention_advice.side_effect = MentorReportError(
+            "Restore 6_Models/vectorstore with the tested Chroma runtime."
+        )
+        with self.assertRaisesRegex(MentorReportError, "Restore 6_Models/vectorstore"):
+            self.make_agent().run_student_analysis(123)
+        self.assertEqual(self.llm.invoke.call_count, 2)
+
     def test_missing_key_does_not_generate_fallback_report(self):
         with patch.dict(os.environ, {}, clear=True), patch.dict(sys.modules, {
             "streamlit": SimpleNamespace(secrets={}),

@@ -72,7 +72,7 @@ Assessment features aggregate the available records by student ID without a pred
 
 ### 1. Clone and install
 
-Python 3.11 is a recommended starting point. Dependencies have lower bounds rather than a locked environment, so version compatibility may need adjustment.
+Python 3.11 is a recommended starting point. scikit-learn is pinned to **1.6.1**, the version recorded in the committed classifier and encoders. Other dependencies use lower bounds rather than a fully locked environment.
 
 ```bash
 git clone https://github.com/KhuzaimaHassan/AI-Academic-Mentor.git
@@ -197,7 +197,7 @@ The flow retrains the model before processing the student list. It can generate 
 - **Prediction scope:** Define a course-relative prediction cutoff and evaluate on held-out cohorts before making early-warning claims. Review aggregation by student ID for students appearing in multiple modules or presentations.
 - **Generated explanations:** LLM “root cause” text is a hypothesis, not a causal finding. Demographic features and prompts need fairness and subgroup evaluation before practical use.
 - **Guidance quality:** Intervention effectiveness and comprehensive citation accuracy have not been established. Human review remains part of the workflow.
-- **Reproducibility:** Provider model availability and scikit-learn, Chroma, and LangChain version compatibility can affect fresh installations.
+- **Reproducibility:** Keep the pinned scikit-learn version when loading the committed classifier. Provider model availability and Chroma/LangChain version compatibility can also affect fresh installations.
 - **Scale and operations:** Mapped Prefect tasks are implemented, but report latency, full-cohort throughput, recovery behavior, and a recurring production schedule are not established by the classifier evaluation.
 
 ## Regression checks

@@ -26,7 +26,7 @@ The displayed totals summarize the dataset; they are not model-evaluation scores
 
 ### Student profile
 
-![Live profile for OULAD example student 6516, showing education, credits, attempts, and recorded outcome](docs/images/02-student-profile.jpg)
+![Live profile detail cards for OULAD example student 6516, showing academic background and recorded outcome](docs/images/02-student-profile.jpg)
 
 The profile's result card shows the recorded dataset outcome. It should not be read as a newly generated model prediction.
 
@@ -34,7 +34,7 @@ The profile's result card shows the recorded dataset outcome. It should not be r
 
 ![Successful hosted report showing student ID, actual model prediction, and a mentoring draft](docs/images/04-successful-mentor-report.jpg)
 
-The repaired workflow includes the classifier prediction and retrieved source excerpts in the downloadable report. Generated advice remains a draft for human review. Dashboard and profile images were captured during the initial wake-up check; the report image was captured after repair.
+The repaired workflow includes the classifier prediction and retrieved source excerpts in the downloadable report. Generated advice remains a draft for human review. All three images were retaken from the hosted app after the UI contrast corrections.
 
 ## What is implemented
 

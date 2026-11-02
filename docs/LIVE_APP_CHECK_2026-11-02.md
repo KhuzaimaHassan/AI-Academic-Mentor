@@ -2,7 +2,7 @@
 
 **Target:** [AI Academic Mentor](https://ai-academic-mentor.streamlit.app/)
 
-**Repaired deployment source:** `4c1ccbd7f57dba158d2680fdb9bce6e40d1caf08`
+**Repaired deployment source:** `27232acb908307921f5441d6791c2b6c7bb888f4`
 
 **Final outcome:** The app woke successfully. Dashboard/profile interaction, a complete mentoring report, and its Markdown download passed the sample check after repair. The initial failures are preserved below as historical evidence.
 
@@ -16,10 +16,13 @@
 | Markdown report download | Passed | Downloaded `mentor_report_3733.md`; inspected the 4,372-character file and confirmed the student ID, classifier prediction, two source labels, and absence of the earlier compilation-error text. |
 | Workflow and UI regression suite | Passed | All 11 tests passed, including failure paths, empty responses, UI download visibility, table rendering, and inference from committed classifier artifacts. Provider calls in automated tests use fixtures. |
 | Real local classifier check | Passed | The committed artifacts loaded with scikit-learn 1.6.1 and predicted Withdrawn for 3733 and Pass for 6516. No model was retrained. |
+| UI contrast recheck | Passed for inspected surfaces | After repairs #7–#8, the hosted dashboard totals fit on one line in the current narrow view, profile selection updated to 6516, and another report completed for 3733. Computed styles confirmed a solid pale-green success alert with dark-green text and dark headings on white report cards. The refreshed screenshots show these surfaces. |
 | Output accuracy and intervention effectiveness | Not certified | Generated advice still needs human review. This sample test does not establish causal validity, perfect factuality, fairness, throughput, or effectiveness. |
 | Continuous availability | Not guaranteed | The visit woke the app. No periodic keep-alive monitor, billing change, or uptime guarantee was configured. |
 
 ![Successful hosted mentoring report](images/04-successful-mentor-report.jpg)
+
+The refreshed report is a later generation than the 4,372-character download checked above. It again displayed prediction Withdrawn and two retrieved source excerpts. It also asserted that the student had expressed uncertainty about remaining enrolled and had not earned credits; those assertions are unsupported by the supplied profile. This is a remaining content-quality limitation despite successful generation and the prompt constraints. The screenshot preserves the actual output.
 
 ## Initial checks before repair
 
@@ -65,7 +68,8 @@ The initial provider response stated that the configured model did not exist or 
 - The committed classifier/encoders record scikit-learn **1.6.1**. Pinning that runtime restored hosted prediction; the same artifacts passed local inference checks. See [compatibility repair #4](https://github.com/KhuzaimaHassan/AI-Academic-Mentor/pull/4).
 - Generated reports include the actual prediction and retrieved excerpts. Prompts distinguish facts from open questions and prohibit invented contacts, dates, and personal circumstances. Markdown tables render as tables. These constraints reduce observed problems but do not certify every generated claim. See [report presentation repair #5](https://github.com/KhuzaimaHassan/AI-Academic-Mentor/pull/5).
 - A clean dependency rebuild was requested after the page picked up new rendering while an older workflow module remained in memory. The final live report included the new deterministic evidence section, confirming that the updated workflow executed. See [runtime update #6](https://github.com/KhuzaimaHassan/AI-Academic-Mentor/pull/6).
+- Text colors now follow their surface: light text on the deeper purple background, dark text and headings on white cards, and solid alert backgrounds with readable status text. Button, dropdown, table, and status colors were also adjusted. Both existing UI tests passed; selected text/background pairs exceed 4.5:1 contrast. This is not a complete accessibility audit. See [UI contrast repair #7](https://github.com/KhuzaimaHassan/AI-Academic-Mentor/pull/7).
 
 The sidebar now reports the configured model and explains when workflow checks occur; its old unconditional health badges were removed.
 
-Screenshots are genuine captures of the public OULAD demo. Dashboard/profile images and the error image document the initial check; the successful report image documents the repaired workflow. No private student records, provider credentials, or account-management screens were captured. No model training, vector-store rebuild, batch run, or credential change was performed.
+Screenshots are genuine captures of the public OULAD demo. Dashboard, profile details, and the successful report were retaken after the UI contrast corrections; only the error image is retained from the initial check as historical evidence. The current narrow browser view was used without resizing. Summary-card spacing was also adjusted to keep dashboard totals on one line in that view; see [layout repair #8](https://github.com/KhuzaimaHassan/AI-Academic-Mentor/pull/8). No private student records, provider credentials, or account-management screens were captured. No model training, vector-store rebuild, batch run, or credential change was performed.

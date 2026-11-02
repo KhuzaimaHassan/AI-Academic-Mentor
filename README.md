@@ -1,314 +1,208 @@
 # 🎓 AI Academic Mentor
 
-**CSIT Data Science Hackathon 2025**
+**Student outcome classification and AI-assisted mentoring · CSIT Data Science Hackathon 2025**
 
-An intelligent academic mentoring system that leverages cutting-edge AI technologies to provide personalized student support, early intervention, and comprehensive academic guidance using the OULAD dataset.
+A Python prototype combining OULAD student records, a scikit-learn classifier, a LangGraph workflow, and retrieval of academic guidance to prepare mentoring reports in Streamlit.
 
----
+[Hosted demo](https://ai-academic-mentor.streamlit.app/) · [Training notebook](3_Notebooks/01_OULAD_Exploration_and_Training.ipynb) · [Application source](9_Deployment/app.py)
 
-## 📋 Problem Statement
+## Why this project
 
-Educational institutions face significant challenges in identifying and supporting at-risk students before academic failure occurs. Traditional approaches to academic mentoring are often:
+Academic records and support resources often live in separate places. This project explores a workflow that brings them together: select a student, estimate an academic outcome, retrieve relevant guidance, and draft a report for a person to review.
 
-- **Reactive rather than proactive** - intervention occurs after poor performance
-- **Resource-intensive** - requiring significant human advisor time
-- **Lack personalization** - generic advice that doesn't address individual student needs
-- **Limited scalability** - cannot handle large student populations effectively
-- **Missing early warning systems** - no systematic way to predict academic risk
+**Status:** Hackathon prototype. The committed notebook records **64.8% held-out classification accuracy**. Prospective early-warning performance and the effectiveness of suggested interventions have not been established.
 
-The OULAD dataset reveals that many students struggle with academic success, with patterns that could be identified early through data-driven analysis. There is a critical need for an intelligent system that can:
+## What is implemented
 
-1. **Predict academic outcomes** before they occur
-2. **Identify at-risk students** automatically
-3. **Provide personalized intervention strategies** based on individual circumstances
-4. **Scale to handle large student populations** efficiently
-5. **Integrate academic knowledge** for evidence-based recommendations
+| Component | Current behavior |
+| --- | --- |
+| **Outcome classifier** | A `GradientBoostingClassifier` predicts Distinction, Fail, Pass, or Withdrawn from six student and assessment features. |
+| **Mentoring workflow** | A fixed LangGraph sequence loads student information, predicts an outcome, drafts an analysis, prepares a search query, retrieves guidance, and compiles a report. |
+| **LLM integration** | Groq's `llama-3.1-8b-instant` is configured for analysis, query generation, and report writing. |
+| **Guidance retrieval** | Sentence Transformers embeddings and a persistent Chroma store retrieve academic guidance text. |
+| **Interactive app** | Streamlit supports student selection, report generation, and Markdown report downloads. |
+| **Batch orchestration** | A Prefect flow retrains the classifier, predicts outcomes, selects students predicted to Fail or Withdrawn, maps report generation over those students, and saves JSON results. |
 
----
+When no LLM is configured or initialization fails, the workflow can produce fallback text. A fallback report does not demonstrate a successful Groq request.
 
-## 🎯 Solution Design
+## How it works
 
-Our **AI Academic Mentor** system addresses these challenges through a comprehensive, multi-component architecture that combines:
-
-### **🤖 Agentic AI with LangGraph**
-- **Intelligent Workflow Orchestration**: LangGraph-based agentic AI system that processes student data through multiple specialized nodes
-- **Contextual Decision Making**: Each node in the workflow makes intelligent decisions based on previous analysis
-- **Adaptive Processing**: The system adapts its approach based on student characteristics and risk factors
-
-### **🧠 Large Language Model Integration with Groq**
-- **Real-time AI Analysis**: Groq's high-performance inference engine with Llama 3 model
-- **Natural Language Understanding**: Processes student information and generates human-readable insights
-- **Empathetic Communication**: Creates supportive, encouraging mentor reports that resonate with students
-
-### **📚 Retrieval-Augmented Generation (RAG)**
-- **Knowledge Base Integration**: ChromaDB vector store containing academic best practices and intervention strategies
-- **Contextual Recommendations**: Retrieves relevant advice based on specific student situations
-- **Evidence-Based Guidance**: Combines ML predictions with proven academic strategies
-
-### **⚙️ Automated Orchestration with Prefect**
-- **End-to-End Automation**: Complete pipeline from data ingestion to report generation
-- **Scalable Processing**: Handles large student populations with parallel processing
-- **Reliable Execution**: Robust error handling and monitoring throughout the pipeline
-
----
-
-## 🛠️ Technology Stack
-
-### **Core AI Technologies**
-- **🤖 LangGraph**: Agentic AI workflow orchestration and state management
-- **🧠 Groq**: High-performance LLM inference with Llama 3-8b-8192 model
-- **📊 ChromaDB**: Vector database for RAG knowledge base implementation
-- **⚙️ Prefect**: Workflow orchestration and task management
-
-### **Machine Learning & Data Science**
-- **🐼 Pandas**: Data manipulation and analysis
-- **🔬 Scikit-learn**: Machine learning algorithms and evaluation
-- **🌳 GradientBoostingClassifier**: Primary ML model for student outcome prediction
-- **📈 Matplotlib/Seaborn**: Data visualization and reporting
-
-### **Development & Deployment**
-- **🐍 Python 3.8+**: Primary programming language
-- **🌐 Streamlit**: Interactive web application interface
-- **📦 LangChain**: LLM application framework
-- **🗂️ Joblib**: Model serialization and persistence
-
-### **Data Processing**
-- **📄 PyPDF**: PDF document processing for knowledge base
-- **🔤 Sentence Transformers**: Text embedding generation
-- **📋 LabelEncoder**: Categorical feature encoding
-- **🔄 RecursiveCharacterTextSplitter**: Document chunking for RAG
-
----
-
-## 🔄 Data Orchestration Pipeline
-
-Our Prefect-based orchestration pipeline provides complete automation of the academic mentoring process:
-
-### **Pipeline Flow Architecture**
-
-```
-🔄 Model Retraining → 📊 Student Loading → 🎯 Bulk Prediction → 
-🚨 At-Risk Identification → 🤖 Parallel Mentor Analysis → 💾 Report Generation
+```mermaid
+flowchart TD
+    D[OULAD CSV files] --> T[Feature preparation and model training]
+    T --> M[Saved classifier and encoders]
+    D --> S[Select a student in Streamlit]
+    S --> G[LangGraph mentoring workflow]
+    M --> G
+    G --> L[Groq analysis and search-query generation]
+    L --> R[Chroma guidance retrieval]
+    K[Academic guidance PDFs and text] --> E[Sentence Transformers embeddings]
+    E --> R
+    R --> F[Report compilation with Groq]
+    F --> H[Human review and Markdown download]
 ```
 
-### **Detailed Pipeline Steps**
+The batch entry point in [`5_Pipeline/prefect_flow.py`](5_Pipeline/prefect_flow.py) uses the same mentoring workflow and writes `7_Results/mentor_reports.json`. Running the flow is an explicit action; a recurring deployment schedule is not included.
 
-#### **1. Model Retraining Task**
-- **Purpose**: Ensures ML models are up-to-date with latest data
-- **Process**: Retrains GradientBoostingClassifier with latest student data
-- **Output**: Updated model files saved to `6_Models/`
+## Recorded model results
 
-#### **2. Student Loading Task**
-- **Purpose**: Loads complete student population for analysis
-- **Process**: Reads `studentInfo.csv` and extracts all student IDs
-- **Output**: List of all student IDs for processing
+The [training notebook](3_Notebooks/01_OULAD_Exploration_and_Training.ipynb) contains saved output for the following historical run. These are not new benchmark results or verified measurements of the hosted app.
 
-#### **3. Bulk Prediction Task**
-- **Purpose**: Predicts academic outcomes for all students
-- **Process**: Iterates through student IDs, calling ML model for each
-- **Output**: Dictionary mapping student IDs to predicted outcomes
+| Evaluation detail | Recorded value |
+| --- | --- |
+| Model | `GradientBoostingClassifier` |
+| Split | Stratified random 80% training / 20% test, `random_state=42` |
+| Training records | 26,074 |
+| Test records | 6,519 |
+| Overall test accuracy | **64.80%** |
+| Macro F1 | **0.58** |
 
-#### **4. At-Risk Identification Task**
-- **Purpose**: Identifies students needing intervention
-- **Process**: Filters predictions for 'Fail', 'Withdrawn', 'Withdrawal' outcomes
-- **Output**: List of at-risk student IDs
+| Outcome | Precision | Recall | F1 | Test support |
+| --- | ---: | ---: | ---: | ---: |
+| Distinction | 0.62 | 0.46 | 0.53 | 605 |
+| Fail | 0.49 | 0.29 | 0.36 | 1,411 |
+| Pass | 0.67 | 0.87 | 0.75 | 2,472 |
+| Withdrawn | 0.69 | 0.69 | 0.69 | 2,031 |
 
-#### **5. Parallel Mentor Analysis Task**
-- **Purpose**: Generates comprehensive mentor reports for at-risk students
-- **Process**: Runs LangGraph agentic workflow for each at-risk student
-- **Output**: Detailed mentor reports with personalized recommendations
+The six model inputs are `gender`, `disability`, `num_of_prev_attempts`, `studied_credits`, `avg_score`, and `num_assessments`. See [`ModelTraining.train_model()`](4_Src_Code/model_training.py) for preparation and training.
 
-#### **6. Report Generation Task**
-- **Purpose**: Saves all mentor reports for review and action
-- **Process**: Compiles reports into structured JSON format
-- **Output**: `7_Results/mentor_reports.json` with all intervention strategies
+Assessment features aggregate the available records by student ID without a prediction-time cutoff. This random split does not establish performance on future cohorts or early in a course. The recorded **29% recall for Fail** means many Fail outcomes were missed in this test. A combined Fail/Withdrawn precision score and throughput benchmarks are not reported here.
 
-### **Pipeline Benefits**
-- **🔄 Automated**: Runs without human intervention
-- **📈 Scalable**: Handles thousands of students efficiently
-- **🛡️ Reliable**: Comprehensive error handling and recovery
-- **📊 Monitored**: Detailed logging and progress tracking
-- **⚡ Fast**: Parallel processing for mentor analysis
+## Run locally
 
----
+### 1. Clone and install
 
-## 🏗️ System Architecture
+Python 3.11 is a recommended starting point. Dependencies have lower bounds rather than a locked environment, so version compatibility may need adjustment.
 
+```bash
+git clone https://github.com/KhuzaimaHassan/AI-Academic-Mentor.git
+cd AI-Academic-Mentor
+python -m venv .venv
+```
 
-### **Component Overview**
+Activate the environment:
 
-#### **Data Layer**
-- **OULAD Dataset**: Comprehensive student performance data
-- **Knowledge Base**: Academic best practices and intervention strategies
-- **Model Storage**: Trained ML models and encoders
+```powershell
+# Windows PowerShell
+.\.venv\Scripts\Activate.ps1
+```
 
-#### **Processing Layer**
-- **ML Pipeline**: Data preprocessing, feature engineering, and model training
-- **RAG System**: Knowledge retrieval and contextual recommendation generation
-- **Agentic AI**: LangGraph-based intelligent workflow orchestration
+```bash
+# macOS / Linux
+source .venv/bin/activate
+```
 
-#### **Orchestration Layer**
-- **Prefect Engine**: Workflow automation and task management
-- **Error Handling**: Robust failure recovery and monitoring
-- **Scalability**: Parallel processing and resource optimization
+```bash
+python -m pip install -r requirements.txt markdown
+```
 
-#### **Application Layer**
-- **Streamlit Interface**: Interactive web application for demonstrations
-- **API Endpoints**: Programmatic access to mentoring capabilities
-- **Report Generation**: Structured output for downstream analysis
+The extra `markdown` package is imported by the app but is not currently listed in `requirements.txt`. The first use of the embedding model may download its weights.
 
----
+### 2. Configure Groq
 
-## 🚀 How to Run
+Set the environment variable in the terminal that will launch Streamlit or Prefect:
 
-### **Prerequisites**
-- Python 3.8 or higher
-- Groq API key for LLM inference
-- OULAD dataset CSV files
+```powershell
+# Windows PowerShell
+$env:GROQ_API_KEY = "your_groq_api_key_here"
+```
 
-### **Installation Steps**
+```bash
+# macOS / Linux
+export GROQ_API_KEY="your_groq_api_key_here"
+```
 
-1. **Clone the Repository**
-   ```bash
-   git clone <repository-url>
-   cd AI-Academic-Mentor
-   ```
+Alternatively, create `.streamlit/secrets.toml`, or enter these settings in Streamlit Cloud's secrets editor:
 
-2. **Install Dependencies**
-   ```bash
-   pip install -r requirements.txt
-   ```
+```toml
+[groq]
+GROQ_API_KEY = "your_groq_api_key_here"
+```
 
-3. **Set Up Environment Variables**
-   ```bash
-   # Create .env file
-   echo "GROQ_API_KEY=your_groq_api_key_here" > .env
-   ```
+The agent checks a constructor-supplied key first, then Streamlit secrets, the legacy root `config.py` setting, and finally the environment variable. Prefer secrets or an environment variable to editing tracked configuration. Creating a `.env` file alone does not ensure the agent entry point loads it.
 
-4. **Prepare Data**
-   - Most OULAD CSV files are included in the repository
-   - **Large file not included:** `studentVle.csv` (422 MB)
-   - Download `studentVle.csv` from [OULAD Dataset](https://analyse.kmi.open.ac.uk/open_dataset)
-   - Place it in `Data_csv's/` directory
-   - Files required: `studentInfo.csv`, `studentAssessment.csv`, `assessments.csv`, `studentVle.csv`
+### 3. Check the data and model files
 
-### **Running the System**
+Run commands from the **repository root** so relative paths resolve correctly.
 
-#### **1. Train ML Models**
-   ```bash
-   python 3_Notebooks/01_OULAD_Exploration_and_Training.ipynb
-   # Or run the training script directly:
-   cd 4_Src_Code && python -c "from model_training import ModelTraining; ModelTraining().train_model()"
-   ```
+- OULAD CSVs are included under `Data_csv's/`. The current training method reads `studentInfo.csv`, `studentAssessment.csv`, and `assessments.csv`.
+- The large `studentVle.csv` is excluded and is not required by the current six-feature training method or mentoring path. Download it from the [OULAD dataset page](https://analyse.kmi.open.ac.uk/open_dataset) for analyses that use VLE activity.
+- Saved classifier/encoder files and a Chroma store are included under `6_Models/`. Regenerate them if their serialized formats are incompatible with your installed libraries.
 
-#### **2. Build Knowledge Base**
-   ```bash
-   python build_vectorstore.py
-   ```
+To rebuild the classifier and encoders from the repository root:
 
-#### **3. Run Complete Pipeline**
-   ```bash
-   python 5_Pipeline/prefect_flow.py
-   ```
+```bash
+python -c "import sys; sys.path.insert(0, '4_Src_Code'); from model_training import ModelTraining; ModelTraining().train_model()"
+```
 
-#### **4. Launch Demo Application**
-   ```bash
-   streamlit run 9_Deployment/app.py
-   ```
+This overwrites `trained_model.pkl`, `final_result_encoder.pkl`, `feature_encoders.pkl`, and `feature_columns.pkl` in `6_Models/` and prints evaluation results.
 
-#### **5. Access the Application**
-   - Open browser to `http://localhost:8501`
-   - Select a student ID from the dropdown
-   - Click "Generate Mentor Report"
-   - View AI-generated recommendations
+For notebook exploration instead:
 
----
+```bash
+python -m pip install jupyterlab
+python -m jupyterlab
+```
 
-### **Individual Component Testing**
+Open `3_Notebooks/01_OULAD_Exploration_and_Training.ipynb`. It uses paths relative to its directory; do not run the `.ipynb` file with `python`.
 
-#### **Test ML Pipeline**
-   ```bash
-   python -c "from 4_Src_Code.model_training import ModelTraining; print('ML Pipeline Ready')"
-   ```
+### 4. Rebuild guidance retrieval if needed
 
-#### **Test RAG System**
-   ```bash
-   python -c "from 4_Src_Code.rag_integration import RAGIntegration; print('RAG System Ready')"
-   ```
+The builder accepts PDFs and text files in `1_Documentation/RAG_Knowledge_Base/`. The repository contains a sample academic-success guide.
 
-#### **Test LangGraph Agent**
-   ```bash
-   python -c "from 4_Src_Code.agentic_ai_pipeline import AgenticAIPipeline; print('Agent Ready')"
-   ```
+```bash
+python build_vectorstore.py
+```
 
----
+This **replaces `6_Models/vectorstore/`**. Review the knowledge-base contents before rebuilding. The bundled guide is demonstration material, not a validated intervention evidence base.
 
-## 👥 Team Members
+### 5. Launch the app
 
-**AI Academic Mentor Team - CSIT Data Science Hackathon 2025**
+```bash
+streamlit run 9_Deployment/app.py
+```
 
-- **Ebaad Khan**
-- **Ezaan Khan**
-- **Syed Ahmed Ali**
-- **Khuzaima Hassan**
+Open the local URL printed by Streamlit, select a student ID, and generate a report. Review the prediction, generated analysis, and retrieved guidance before using it.
 
-### **Team Expertise**
-- **Machine Learning**: Advanced ML algorithms and model optimization
-- **AI/LLM Integration**: LangGraph, Groq, and RAG system implementation
-- **Data Engineering**: ETL pipelines, data preprocessing, and feature engineering
-- **Software Development**: Python, Streamlit, and scalable application architecture
-- **Educational Technology**: Understanding of academic processes and student support systems
+### Optional: run the batch flow
 
----
+```bash
+python 5_Pipeline/prefect_flow.py
+```
 
-## 📊 Results & Demo Link
+The flow retrains the model before processing the student list. It can generate many Groq requests and writes results to `7_Results/mentor_reports.json`; start with the interactive app when exploring the project.
 
-### **System Performance**
-- **Model Accuracy**: 87% accuracy in predicting student outcomes
-- **Processing Speed**: 1000+ students analyzed in under 5 minutes
-- **At-Risk Detection**: 95% precision in identifying students needing intervention
-- **Report Generation**: Comprehensive mentor reports in under 30 seconds per student
+## Repository guide
 
-### **Key Achievements**
-- ✅ **Complete Automation**: End-to-end pipeline from data to actionable insights
-- ✅ **Scalable Architecture**: Handles large student populations efficiently
-- ✅ **Personalized Recommendations**: AI-generated, context-aware academic guidance
-- ✅ **Early Intervention**: Proactive identification of at-risk students
-- ✅ **Evidence-Based**: Combines ML predictions with proven academic strategies
+| Path | Purpose |
+| --- | --- |
+| [`3_Notebooks/`](3_Notebooks/) | Exploration, training, and saved evaluation output |
+| [`4_Src_Code/model_training.py`](4_Src_Code/model_training.py) | Feature preparation, classifier training, and artifact persistence |
+| [`4_Src_Code/utils/helpers.py`](4_Src_Code/utils/helpers.py) | Student feature lookup and predictions from saved artifacts |
+| [`4_Src_Code/agentic_ai_pipeline.py`](4_Src_Code/agentic_ai_pipeline.py) | LangGraph workflow and Groq calls |
+| [`4_Src_Code/rag_integration.py`](4_Src_Code/rag_integration.py) | Embeddings, Chroma retrieval, and guidance formatting |
+| [`5_Pipeline/prefect_flow.py`](5_Pipeline/prefect_flow.py) | Batch orchestration and JSON report output |
+| [`6_Models/`](6_Models/) | Classifier, encoders, and vector store |
+| [`9_Deployment/app.py`](9_Deployment/app.py) | Streamlit interface and Markdown download |
+| [`Data_csv's/`](Data_csv's/) | Included OULAD tables |
+| [`build_vectorstore.py`](build_vectorstore.py) | Knowledge-base index rebuild |
 
-### **Demo Links**
-- **🌐 Live Demo**: [[Link to hosted Streamlit app](https://ai-academic-mentor.streamlit.app/)]
+**Stack:** Python, pandas, scikit-learn, Joblib, LangGraph, Groq, LangChain, Sentence Transformers, Chroma, Prefect, Streamlit, and Plotly.
 
-### **Impact Metrics**
-- **Students Analyzed**: 32,593 students from OULAD dataset
-- **At-Risk Students Identified**: students flagged for intervention
-- **Reports Generated**: comprehensive mentor reports
+## Limitations and next steps
 
-### **Future Enhancements**
-- **Real-time Monitoring**: Continuous student performance tracking
-- **Multi-modal Integration**: Incorporation of additional data sources
-- **Advanced Analytics**: Deeper insights into academic success patterns
-- **Mobile Application**: Student-facing mobile app for direct access
+- **Prediction scope:** Define a course-relative prediction cutoff and evaluate on held-out cohorts before making early-warning claims. Review aggregation by student ID for students appearing in multiple modules or presentations.
+- **Generated explanations:** LLM “root cause” text is a hypothesis, not a causal finding. Demographic features and prompts need fairness and subgroup evaluation before practical use.
+- **Guidance quality:** Intervention effectiveness and comprehensive citation accuracy have not been established. Human review remains part of the workflow.
+- **Reproducibility:** Provider model availability and scikit-learn, Chroma, and LangChain version compatibility can affect fresh installations.
+- **Scale and operations:** Mapped Prefect tasks are implemented, but report latency, full-cohort throughput, recovery behavior, and a recurring production schedule are not established by the classifier evaluation.
 
----
+## Team and acknowledgments
 
-## 🎯 Hackathon Compliance
+Built for the **CSIT Data Science Hackathon 2025** by **Ebaad Khan, Ezaan Khan, Syed Ahmed Ali, and Khuzaima Hassan**.
 
-This project strictly adheres to CSIT Data Science Hackathon 2025 requirements:
+The project uses the **Open University Learning Analytics Dataset (OULAD)**. See the [official dataset page](https://analyse.kmi.open.ac.uk/open_dataset) for provenance, documentation, and data terms.
 
-- ✅ **Agentic AI**: LangGraph implementation with intelligent workflow orchestration
-- ✅ **RAG**: ChromaDB vector database with semantic search capabilities
-- ✅ **Orchestration**: Prefect workflow management for automated processing
-- ✅ **File Structure**: Exact directory layout as specified in requirements
-- ✅ **Technology Stack**: Groq + Llama 3 integration with modern AI frameworks
-- ✅ **Scalability**: Production-ready architecture for real-world deployment
+## License
 
----
-
-## 📄 License
-
-This project is developed for the CSIT Data Science Hackathon 2025. All rights reserved.
-
----
-
-**Built with ❤️ for educational excellence and student success**
+Developed for the CSIT Data Science Hackathon 2025. **All rights reserved.** No standalone project license file is currently included.

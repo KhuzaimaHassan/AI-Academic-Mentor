@@ -1,7 +1,9 @@
 # Hosted app check — November 2, 2026
 
-**Target:** [AI Academic Mentor](https://ai-academic-mentor.streamlit.app/)  
-**Source reviewed:** `e8bb4aaa40a3a8b3699c0165721c1ea987d30da6`  
+**Target:** [AI Academic Mentor](https://ai-academic-mentor.streamlit.app/)
+
+**Source reviewed:** `e8bb4aaa40a3a8b3699c0165721c1ea987d30da6`
+
 **Overall outcome:** Woke successfully; dashboard and profile interaction passed; mentor-report generation failed.
 
 ## Observed checks

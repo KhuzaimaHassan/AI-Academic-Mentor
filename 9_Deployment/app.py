@@ -617,6 +617,15 @@ st.markdown("""
        ============================================ */
     
     @media (max-width: 768px) {
+        .stat-card {
+            padding: 1rem 0.5rem !important;
+        }
+
+        .stat-card h3 {
+            font-size: 1.5rem !important;
+            white-space: nowrap;
+        }
+
         .block-container {
             padding-left: 1rem !important;
             padding-right: 1rem !important;

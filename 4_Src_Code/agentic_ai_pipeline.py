@@ -22,19 +22,15 @@ current_dir = Path(__file__).parent
 sys.path.insert(0, str(current_dir))
 sys.path.insert(0, str(current_dir / "utils"))
 
-try:
-    from utils.helpers import predict_student_result
+from reporting import MentorReportError, get_groq_model, provider_failure
+
+from utils.helpers import predict_student_result
+
+
+def create_rag_system():
+    # Embedding libraries are only needed when a report is requested.
     from rag_integration import RAGIntegration
-except ImportError as e:
-    print(f"Import error: {e}")
-    # Fallback imports
-    try:
-        from helpers import predict_student_result
-        from rag_integration import RAGIntegration
-    except ImportError:
-        print("Failed to import helper modules")
-        predict_student_result = None
-        RAGIntegration = None
+    return RAGIntegration()
 
 # Define the Agent State
 class AgentState(TypedDict):
@@ -49,7 +45,8 @@ class AgentState(TypedDict):
 class AgenticAIPipeline:
     """Implements LangGraph-based agentic AI system for academic mentoring"""
     
-    def __init__(self, groq_api_key: str = None):
+    def __init__(self, groq_api_key: str = None, groq_model: str = None):
+        self.model_name = get_groq_model(groq_model)
         # Initialize the LLM
         if groq_api_key:
             api_key = groq_api_key
@@ -88,22 +85,38 @@ class AgenticAIPipeline:
             try:
                 self.llm = ChatGroq(
                     groq_api_key=api_key,
-                    model="llama-3.1-8b-instant",
-                    temperature=0.7
+                    model=self.model_name,
+                    temperature=0.7,
+                    timeout=45,
+                    max_retries=1,
+                    max_tokens=2048,
+                    **({"reasoning_effort": "low"}
+                       if self.model_name.startswith("openai/gpt-oss-") else {})
                 )
                 print("✅ Groq LLM initialized successfully")
             except Exception as e:
                 print(f"❌ Failed to initialize Groq LLM: {e}")
-                self.llm = None
+                raise MentorReportError("The Groq client could not be initialized.") from e
         else:
             print("⚠️ Groq API key not configured. Please add it via Streamlit secrets or config.py")
-            self.llm = None
+            raise MentorReportError("Configure GROQ_API_KEY before generating a report.")
         
         # Initialize RAG system
-        self.rag_system = RAGIntegration()
+        self.rag_system = create_rag_system()
         
         # Build the LangGraph workflow
         self.app = self._build_graph()
+
+    def _invoke_text(self, prompt):
+        """A provider failure or empty response must stop the graph."""
+        try:
+            response = self.llm.invoke([HumanMessage(content=prompt)])
+        except Exception as error:
+            raise MentorReportError(provider_failure(error, self.model_name)) from error
+        text = response.content
+        if not isinstance(text, str) or not text.strip():
+            raise MentorReportError("Groq returned an empty report response. Try again.")
+        return text.strip()
     
     def _build_graph(self):
         """Build the LangGraph workflow with nodes and edges"""
@@ -161,10 +174,7 @@ class AgenticAIPipeline:
             
         except Exception as e:
             print(f"❌ Error getting student info: {e}")
-            return {
-                **state,
-                "student_info": {"error": str(e)}
-            }
+            raise MentorReportError("The selected student's records could not be loaded.") from e
     
     def predict_performance(self, state: AgentState) -> AgentState:
         """Node: Predict student performance using ML model"""
@@ -176,7 +186,7 @@ class AgenticAIPipeline:
             predicted_result = predict_student_result(student_id)
             
             if predicted_result is None:
-                predicted_result = "Unable to predict - model not available"
+                raise MentorReportError("The classifier could not produce a prediction. Check the saved model and encoders.")
             
             print(f"✅ Predicted result: {predicted_result}")
             
@@ -187,10 +197,7 @@ class AgenticAIPipeline:
             
         except Exception as e:
             print(f"❌ Error predicting performance: {e}")
-            return {
-                **state,
-                "predicted_result": f"Prediction failed: {str(e)}"
-            }
+            raise MentorReportError("The classifier could not produce a prediction. Check the saved model and encoders.") from e
     
     def analyze_root_cause(self, state: AgentState) -> AgentState:
         """Node: Analyze root causes using LLM"""
@@ -226,11 +233,7 @@ class AgenticAIPipeline:
             """
             
             # Get LLM response
-            if self.llm is None:
-                root_causes = "LLM not available - using fallback analysis. Student shows typical patterns based on their demographic and academic history."
-            else:
-                response = self.llm.invoke([HumanMessage(content=prompt)])
-                root_causes = response.content
+            root_causes = self._invoke_text(prompt)
             
             print(f"✅ Root cause analysis completed")
             
@@ -241,10 +244,9 @@ class AgenticAIPipeline:
             
         except Exception as e:
             print(f"❌ Error analyzing root causes: {e}")
-            return {
-                **state,
-                "root_causes": f"Analysis failed: {str(e)}"
-            }
+            if isinstance(e, MentorReportError):
+                raise
+            raise MentorReportError("Student analysis could not be completed.") from e
     
     def generate_rag_query(self, state: AgentState) -> AgentState:
         """Node: Generate RAG query based on root causes"""
@@ -273,11 +275,7 @@ class AgenticAIPipeline:
             """
             
             # Get LLM response
-            if self.llm is None:
-                rag_query = "academic success strategies"
-            else:
-                response = self.llm.invoke([HumanMessage(content=prompt)])
-                rag_query = response.content.strip()
+            rag_query = self._invoke_text(prompt)
             
             print(f"✅ Generated RAG query: '{rag_query}'")
             
@@ -288,10 +286,9 @@ class AgenticAIPipeline:
             
         except Exception as e:
             print(f"❌ Error generating RAG query: {e}")
-            return {
-                **state,
-                "rag_query": f"Query generation failed: {str(e)}"
-            }
+            if isinstance(e, MentorReportError):
+                raise
+            raise MentorReportError("The guidance search query could not be generated.") from e
     
     def get_rag_advice(self, state: AgentState) -> AgentState:
         """Node: Get intervention advice from RAG system"""
@@ -312,10 +309,7 @@ class AgenticAIPipeline:
             
         except Exception as e:
             print(f"❌ Error getting RAG advice: {e}")
-            return {
-                **state,
-                "intervention_advice": f"RAG advice retrieval failed: {str(e)}"
-            }
+            raise MentorReportError("Academic guidance could not be retrieved. Check the knowledge-base index.") from e
     
     def compile_final_report(self, state: AgentState) -> AgentState:
         """Node: Compile final empathetic report"""
@@ -348,31 +342,7 @@ class AgenticAIPipeline:
             """
             
             # Get LLM response
-            if self.llm is None:
-                final_report = f"""
-# 📋 AI Academic Mentor Report
-
-## Student Analysis Summary
-**Student ID:** {state['student_id']}  
-**Predicted Result:** {predicted_result}
-
-## Key Findings
-{root_causes}
-
-## Intervention Recommendations
-{intervention_advice}
-
-## Next Steps
-1. Review the intervention recommendations above
-2. Consider implementing time management strategies
-3. Seek additional academic support if needed
-4. Maintain regular study schedules
-
-*Note: This report was generated using fallback analysis due to LLM unavailability.*
-"""
-            else:
-                response = self.llm.invoke([HumanMessage(content=prompt)])
-                final_report = response.content
+            final_report = self._invoke_text(prompt)
             
             print(f"✅ Final report compiled")
             
@@ -383,10 +353,9 @@ class AgenticAIPipeline:
             
         except Exception as e:
             print(f"❌ Error compiling final report: {e}")
-            return {
-                **state,
-                "final_report": f"Report compilation failed: {str(e)}"
-            }
+            if isinstance(e, MentorReportError):
+                raise
+            raise MentorReportError("The mentoring report could not be compiled.") from e
     
     def run_student_analysis(self, student_id: int) -> str:
         """
@@ -417,9 +386,14 @@ class AgenticAIPipeline:
             
             print(f"✅ Student analysis completed for ID: {student_id}")
             
-            return final_state.get("final_report", "Analysis failed to complete.")
+            report = final_state.get("final_report", "")
+            if not report.strip():
+                raise MentorReportError("The workflow did not produce a report.")
+            return report
             
         except Exception as e:
             error_msg = f"❌ Student analysis failed: {str(e)}"
             print(error_msg)
-            return error_msg
+            if isinstance(e, MentorReportError):
+                raise
+            raise MentorReportError("Student analysis failed. Check the model, data, and knowledge-base configuration.") from e

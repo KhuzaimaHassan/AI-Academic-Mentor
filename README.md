@@ -36,12 +36,12 @@ The profile's result card shows the recorded dataset outcome. It should not be r
 | --- | --- |
 | **Outcome classifier** | A `GradientBoostingClassifier` predicts Distinction, Fail, Pass, or Withdrawn from six student and assessment features. |
 | **Mentoring workflow** | A fixed LangGraph sequence loads student information, predicts an outcome, drafts an analysis, prepares a search query, retrieves guidance, and compiles a report. |
-| **LLM integration** | Groq's `llama-3.1-8b-instant` is configured for analysis, query generation, and report writing. |
+| **LLM integration** | Groq handles analysis, query generation, and report writing. The default is `openai/gpt-oss-20b`; `GROQ_MODEL` can select a model available to your account. |
 | **Guidance retrieval** | Sentence Transformers embeddings and a persistent Chroma store retrieve academic guidance text. |
 | **Interactive app** | Streamlit supports student selection, report generation, and Markdown report downloads. |
 | **Batch orchestration** | A Prefect flow retrains the classifier, predicts outcomes, selects students predicted to Fail or Withdrawn, maps report generation over those students, and saves JSON results. |
 
-When no LLM is configured or initialization fails, the workflow can produce fallback text. A fallback report does not demonstrate a successful Groq request.
+Missing credentials, provider failures, failed predictions, and unavailable guidance stop the workflow with an explicit error. A download is offered only after the complete workflow returns a report.
 
 ## How it works
 
@@ -111,10 +111,10 @@ source .venv/bin/activate
 ```
 
 ```bash
-python -m pip install -r requirements.txt markdown
+python -m pip install -r requirements.txt
 ```
 
-The extra `markdown` package is imported by the app but is not currently listed in `requirements.txt`. The first use of the embedding model may download its weights.
+The first use of the embedding model may download its weights.
 
 ### 2. Configure Groq
 
@@ -135,9 +135,12 @@ Alternatively, create `.streamlit/secrets.toml`, or enter these settings in Stre
 ```toml
 [groq]
 GROQ_API_KEY = "your_groq_api_key_here"
+GROQ_MODEL = "openai/gpt-oss-20b"
 ```
 
 The agent checks a constructor-supplied key first, then Streamlit secrets, the legacy root `config.py` setting, and finally the environment variable. Prefer secrets or an environment variable to editing tracked configuration. Creating a `.env` file alone does not ensure the agent entry point loads it.
+
+Model selection checks a constructor override, `[groq].GROQ_MODEL` in Streamlit secrets, then the `GROQ_MODEL` environment variable, and finally the default. Model availability depends on the account; verify access in Groq before selecting a different model. This configuration does not change the provider plan or billing settings.
 
 ### 3. Check the data and model files
 
@@ -214,6 +217,16 @@ The flow retrains the model before processing the student list. It can generate 
 - **Guidance quality:** Intervention effectiveness and comprehensive citation accuracy have not been established. Human review remains part of the workflow.
 - **Reproducibility:** Provider model availability and scikit-learn, Chroma, and LangChain version compatibility can affect fresh installations.
 - **Scale and operations:** Mapped Prefect tasks are implemented, but report latency, full-cohort throughput, recovery behavior, and a recurring production schedule are not established by the classifier evaluation.
+
+## Regression checks
+
+Run from the repository root after installing the requirements:
+
+```bash
+python -m unittest discover -s tests -v
+```
+
+The tests use controlled provider and retrieval fixtures. They cover workflow success, model-access failures, rate limits, missing credentials, empty responses, failed predictions/retrieval, and whether the interface offers a download. They do not certify live provider access; a hosted report check is still required.
 
 ## Team and acknowledgments
 

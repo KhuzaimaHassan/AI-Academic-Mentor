@@ -310,13 +310,13 @@ class RAGIntegration:
             retriever = self.get_rag_retriever()
             
             if retriever is None:
-                return "❌ Unable to access knowledge base. Please ensure the vector store is properly initialized."
+                raise RuntimeError("The knowledge-base retriever is unavailable.")
             
             # Retrieve relevant documents
             retrieved_docs = retriever.invoke(query)
             
             if not retrieved_docs:
-                return "No relevant intervention advice found in the knowledge base."
+                raise RuntimeError("No guidance was retrieved from the knowledge base.")
             
             print(f"✅ Retrieved {len(retrieved_docs)} relevant documents")
             
@@ -337,4 +337,4 @@ class RAGIntegration:
         except Exception as e:
             error_msg = f"❌ Error getting intervention advice: {e}"
             print(error_msg)
-            return error_msg
+            raise RuntimeError("Academic guidance retrieval failed.") from e

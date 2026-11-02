@@ -329,7 +329,7 @@ class RAGIntegration:
                 combined_content.append(f"Source {i} ({source_info}):\n{content_snippet}")
             
             # Join all content with separators
-            final_content = "\n\n" + "="*50 + "\n\n".join(combined_content)
+            final_content = "\n\n---\n\n".join(combined_content)
             
             print(f"✅ Generated intervention advice with {len(final_content)} characters")
             return final_content

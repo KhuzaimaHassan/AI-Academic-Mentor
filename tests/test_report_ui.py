@@ -1,0 +1,43 @@
+"""Exercise the Streamlit error path without credentials or provider calls."""
+
+from pathlib import Path
+import sys
+import unittest
+from unittest.mock import Mock, patch
+
+from streamlit.testing.v1 import AppTest
+
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT / "4_Src_Code"))
+from reporting import MentorReportError
+
+
+class ReportInterfaceTests(unittest.TestCase):
+    def test_provider_failure_has_no_report_download(self):
+        agent = Mock()
+        agent.run_student_analysis.side_effect = MentorReportError("Groq model unavailable. Set GROQ_MODEL.")
+        with patch("agentic_ai_pipeline.AgenticAIPipeline", return_value=agent):
+            app = AppTest.from_file(str(ROOT / "9_Deployment/app.py"))
+            app.secrets["groq"] = {"GROQ_MODEL": "test-model"}
+            app.run(timeout=30)
+            self.assertEqual(len(app.exception), 0)
+            app.button[0].click().run(timeout=30)
+            self.assertEqual(len(app.exception), 0)
+            self.assertTrue(any("GROQ_MODEL" in error.value for error in app.error))
+            self.assertEqual(len(app.get("download_button")), 0)
+
+    def test_success_exposes_report_download(self):
+        agent = Mock(model_name="test-model")
+        agent.run_student_analysis.return_value = "# Mentor Report\nA reviewed study plan."
+        with patch("agentic_ai_pipeline.AgenticAIPipeline", return_value=agent):
+            app = AppTest.from_file(str(ROOT / "9_Deployment/app.py"))
+            app.secrets["groq"] = {"GROQ_MODEL": "test-model"}
+            app.run(timeout=30)
+            app.button[0].click().run(timeout=30)
+            self.assertEqual(len(app.exception), 0)
+            self.assertEqual(len(app.error), 0, [error.value for error in app.error])
+            self.assertEqual(len(app.get("download_button")), 1)
+
+
+if __name__ == "__main__":
+    unittest.main()

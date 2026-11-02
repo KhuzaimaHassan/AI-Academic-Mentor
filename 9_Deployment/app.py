@@ -5,6 +5,8 @@ Main deployment interface for the academic mentoring system
 
 # Suppress warnings for cleaner output
 import markdown
+from html import escape
+import logging
 import warnings
 warnings.filterwarnings('ignore')
 import textwrap
@@ -24,6 +26,7 @@ sys.path.append(str(Path(__file__).parent.parent / "4_Src_Code"))
 
 # Import the LangGraph agent function
 from agentic_ai_pipeline import AgenticAIPipeline
+from reporting import MentorReportError, get_groq_model
 
 # Page configuration
 st.set_page_config(
@@ -744,9 +747,8 @@ def main():
         ### 🔧 System Status
         """)
         
-        st.success("✅ AI Model: Active")
-        st.success("✅ RAG System: Ready")
-        st.success("✅ ML Pipeline: Loaded")
+        st.info(f"Configured Groq model: {get_groq_model()}")
+        st.caption("Model access, classifier, and retrieval are checked when a report runs.")
         
     st.markdown("---")
     
@@ -900,6 +902,7 @@ def main():
                     progress_bar.progress(60)
                     
                     final_report = agent.run_student_analysis(selected_id)
+                    st.success(f"Report generated with {agent.model_name}; classifier and guidance retrieval completed.")
                     progress_bar.progress(100)
                     
                     # Clear progress indicators
@@ -908,7 +911,7 @@ def main():
                     
                     # --- FIXED REPORT RENDERING ---
                     # Convert the Markdown report string to HTML
-                    report_as_html = markdown.markdown(final_report)
+                    report_as_html = markdown.markdown(escape(final_report))
                     
                     # Render everything in a single st.markdown call to keep it contained
                     st.markdown(f"""
@@ -944,13 +947,15 @@ def main():
             except Exception as e:
                 progress_text.empty()
                 progress_bar.empty()
+                logging.getLogger(__name__).exception("Mentor report generation failed")
                 
-                st.error(f"❌ Error generating mentor report: {e}")
+                message = str(e) if isinstance(e, MentorReportError) else "The report could not be generated. Check the application logs."
+                st.error(f"❌ {message}")
                 
                 with st.expander("💡 Troubleshooting Tips"):
                     st.markdown("""
-                    1. ✅ Ensure Groq API key is configured in `config.py`
-                    2. ✅ Check that all dependencies are installed
+                    1. Check `GROQ_API_KEY` in Streamlit secrets or your environment.
+                    2. Set `GROQ_MODEL` to a model available to that Groq account.
                     3. ✅ Verify that ML models are trained
                     4. ✅ Ensure RAG knowledge base is built
                     """)
@@ -966,7 +971,7 @@ def main():
             <div class="arch-card">
                 <div style="font-size: 2.5rem;">🤖</div>
                 <strong>AI Model</strong>
-                <p>Groq Llama 3.1 8B</p>
+                <p>Configurable Groq model</p>
             </div>
             <div class="arch-card">
                 <div style="font-size: 2.5rem;">🧠</div>
